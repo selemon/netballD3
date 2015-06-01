@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ANZ Netball Championship</title>
+    <link rel="shortcut icon" type="image/x-icon" href="data/anzico.ico">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="deepCopy.js"></script>
+    <script type="text/javascript" src="bar.js"></script>
+
+    <style type="text/css">
+        body {
+            /*border: 2px solid #2E9AFE;*/
+            font: 10px sans-serif;}
+
+        #title {
+            text-align: center;
+            text-align: top;
+            color: white;
+            text-shadow: 2px 2px black;
+            border-color: #FFFAF0;
+            background-color: #2E9AFE;}
+
+        #teams {
+            text-align: center;
+            background-color: #58ACFA;}
+
+        #rounds {
+            text-align: left;
+            color: blue; }
+
+        #years {
+            text-align: left;
+            color: blue;}
+
+        .bar {
+            fill: #1b8053;}
+
+        .text{
+            fill: blue;}
+
+        .axis {
+            font: 10px sans-serif;
+            fill: white;}
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;}
+
+        .arc path {
+            stroke: #fff;}
+
+        .x.axis path {
+            display: none;}
+    </style>
+</head>
+
+<body>
+    <!-- OLD ANZ BANNER AT TOP OF PAGE
+<div id="anz">  
+    <a href="#" onMouseDown="return mouseOveranzMDown()" onMouseUp="return mouseOveranzMUp()">
+        <img name="anzButton" src="data/anz.png" width="100" height="100" border="0"
+            alt="javascript button"></a>
+</div>
+-->
+<div id="title">
+    <h1 color="red"> 
+        <img name="nzteams" src="data/NZ.JPG" align="left" style="margin-left:285px" width="75" height="45" border="10"
+            alt="javascript button">
+        Australasian Netball Championship
+        <img name="nzteams" src="data/AUS.JPG" align="right" style="margin-right:285px" width="75" height="45" corder-color="clear" border="10"
+            alt="javascript button">
+        </h1></br></br>
+</div>
+
+<div id="teams">
+<!--NZ teams-->
+    <a href="#" onMouseDown="return mouseOverPulseMDown()" onMouseUp="return mouseOverPulseMUp()">
+        <img name="pulseButton" src="data/CentralPulse.png" title="Central Pulse" width="100" height="100" border="10"
+            alt="javascript button"></a>
+        
+    <a href="#" onMouseDown="return mouseOverMysticsMDown()" onMouseUp="return mouseOverMysticsMUp()">
+        <img name="mysticsButton" src="data/NorthernMystics.png" title="Northern Mystics" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverMagicMDown()" onMouseUp="return mouseOverMagicMUp()">
+        <img name="magicButton" src="data/WaikatoBayofPlentyMagic.png" title="Waikato Bay of Plenty Magics" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverSteelMDown()" onMouseUp="return mouseOverSteelMUp()">
+        <img name="steelButton" src="data/SouthernSteel.png" title="Southern Steel" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverTactixMDown()" onMouseUp="return mouseOverTactixMUp()">
+        <img name="tactixButton" src="data/CanterburyTactix.png" title="Canterbury Tactix" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+<!--ANZ SYMBOL-->
+    <a href="#" onMouseDown="return mouseOveranzMDown()" onMouseUp="return mouseOveranzMUp()">
+        <img name="anzButton" src="data/anz.png" align="center" style="margin-left:100px" width="180" height="180" border="0"
+            alt="javascript button"></a>
+
+<!--AUS teams-->
+    <a href="#" onMouseDown="return mouseOverSwiftsMDown()" onMouseUp="return mouseOverSwiftsMUp()">
+        <img name="swiftsButton" src="data/NewSouthWalesSwifts.png" title="NSW Swifts" align="centre" style="margin-left:120px"
+            width="100" height="100" border="10" alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverThunderMDown()" onMouseUp="return mouseOverThunderMUp()">
+        <img name="thunderButton" src="data/AdelaideThunderbirds.png" title="Adalaide Thunderbirds" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverVixensMDown()" onMouseUp="return mouseOverVixensMUp()">
+        <img name="vixensButton" src="data/MelbourneVixens.png" title="Melbourne Vixens" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverFeverMDown()" onMouseUp="return mouseOverFeverMUp()">
+        <img name="feverButton" src="data/WestCoastFever.png" title="West Coast Fever" width="100" height="100" border="10"
+            alt="javascript button"></a>
+
+    <a href="#" onMouseDown="return mouseOverFirebirdsMDown()" onMouseUp="return mouseOverFirebirdsMUp()">
+        <img name="firebirdsButton" src="data/QueenslandFirebirds.png" title="Queensland Firebirds" width="100" height="100" border="10"
+            alt="javascript button"></a>
+</div></br></br></br>
+
+
+<div id="years" >
+    <label align="left" style="margin-left:10px"><font size="2">Year Select:</font>
+        <select id="years2" align="left" style="margin-left:10px">
+            <option value="All Years" >All Years</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+        </select>
+    </label>
+</div></br>
+
+<div id="rounds">
+    <label><font size="2">Round Select:</font>
+        <select id="rounds2" align="left" style="margin-left:10px">
+            <option>All Rounds</option>
+            <option>Round 1</option>
+            <option>Round 2</option>
+            <option>Round 3</option>
+            <option>Round 4</option>
+            <option>Round 5</option>
+            <option>Round 6</option>
+            <option>Round 7</option>
+            <option>Round 8</option>
+            <option>Round 9</option>
+            <option>Round 10</option>
+            <option>Round 11</option>
+            <option>Round 12</option>
+            <option>Round 13</option>
+            <option>Round 14</option>
+            <option>Round 15</option>
+            <option>Round 16</option>
+            <option>Round 17</option>
+        </select>
+    </label>
+</div></br></br>
+
+<div id="refresh" align="left" style="margin-left:97px">
+    <button type="button" onclick="refreshGraph()">Display</button>
+</div></br><!--style="background-color:#33FFFF-->
+<div id="donutHome" align="left" style="margin-left:85px">
+    <button type="button2" onclick="makeDonutHome()">Home Wins</button>
+</div></br><!-- style="background-color:transparent"-->
+<div id="donutAway" align="left" style="margin-left:85px">
+    <button type="button3" onclick="makeDonutAway()">Away Wins</button>
+</div></br>
+
+
+<div class="chart">
+</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+//read in data. x
+// make buttons. x
+// makee graphs.
+// after that done
+
+
+
+
+var comparing = [];
+
+function refreshGraph(){
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+}
+//get all aus teams
+
+function getAllAusDown(){
+    mouseOverFeverMDown();
+    mouseOverThunderMDown();
+    mouseOverFirebirdsMDown();
+    mouseOverVixensMDown();
+    mouseOverSwiftsMDown();
+}
+function getAllAusUp(){
+    mouseOverFeverMUp();
+    mouseOverThunderMUp();
+    mouseOverFirebirdsMUp();
+    mouseOverVixensMUp();
+    mouseOverSwiftsMUp();
+}
+
+function getAllNzDown(){
+    mouseOverMagicMDown();
+    mouseOverSteelMDown();
+    mouseOverPulseMDown();
+    mouseOverTactixMDown();
+    mouseOverMysticsMDown();
+}
+function getAllNzUp(){
+    mouseOverMagicMUp();
+    mouseOverSteelMUp();
+    mouseOverPulseMUp();
+    mouseOverTactixMUp();
+    mouseOverMysticsMUp();
+}
+
+function makeDonutHome(){
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateDataDonut(true);
+}
+function makeDonutAway(){
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateDataDonut(false);
+}
+
+//central pulse buttons
+function mouseOverPulseMDown() {
+    document.images["pulseButton"].src = "data/CentralPulse.png";
+
+    return true;
+}
+var pulseUp = false;
+function mouseOverPulseMUp() {
+
+    if (pulseUp == false) {
+        //console.log("Pushing pulse");
+        comparing.push("Central Pulse");
+        document.images["pulseButton"].src = "data/white/CentralPulseWhite.jpg";
+    }
+
+    if (pulseUp == false) {
+        pulseUp = true;
+    }
+    else {
+        //console.log("Removing pulse");
+        var index = comparing.indexOf("Central Pulse");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        pulseUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+
+    return true;
+}
+
+//northern mystics buttons
+function mouseOverMysticsMDown() {
+    document.images["mysticsButton"].src = "data/NorthernMystics.png";
+
+    return true;
+}
+
+var mysticsUp = false;
+function mouseOverMysticsMUp() {
+    if (mysticsUp == false) {
+        //console.log("Pushing mystics");
+        comparing.push("Northern Mystics");
+        document.images["mysticsButton"].src = "data/white/NorthernMysticsWhite.jpg";
+    }
+
+    if (mysticsUp == false) {
+        mysticsUp = true;
+    }
+    else {
+        //console.log("Removing mystics");
+        var index = comparing.indexOf("Northern Mystics");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        mysticsUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+//magic button
+function mouseOverMagicMDown() {
+    document.images["magicButton"].src = "data/WaikatoBayofPlentyMagic.png";
+
+    return true;
+}
+var magicUp = false;
+function mouseOverMagicMUp() {
+    if (magicUp == false) {
+        //console.log("Pushing magic");
+        comparing.push("Waikato Bay of Plenty Magic");
+        document.images["magicButton"].src = "data/white/WaikatoBayofPlentyMagicWhite.jpg";
+    }
+
+    if (magicUp == false) {
+        magicUp = true;
+    }
+    else {
+        //console.log("Removing magic");
+        var index = comparing.indexOf("Waikato Bay of Plenty Magic");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        magicUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+//steel button
+function mouseOverSteelMDown() {
+    document.images["steelButton"].src = "data/SouthernSteel.png";
+
+    return true;
+}
+var steelUp = false;
+function mouseOverSteelMUp() {
+    if (steelUp == false) {
+        //console.log("Pushing steel");
+        comparing.push("Southern Steel");
+        document.images["steelButton"].src = "data/white/SouthernSteelWhite.jpg";
+    }
+
+    if (steelUp == false) {
+        steelUp = true;
+    }
+    else {
+        //console.log("Removing steel");
+        var index = comparing.indexOf("Southern Steel");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        steelUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+//canterbury tactix button
+function mouseOverTactixMDown() {
+    document.images["tactixButton"].src = "data/CanterburyTactix.png";
+
+    return true;
+}
+
+var tactixUp = false;
+function mouseOverTactixMUp() {
+    if (tactixUp == false) {
+        console.log("Pushing tactix");
+        comparing.push("Canterbury Tactix");
+        document.images["tactixButton"].src = "data/white/CanterburyTactixWhite.jpg";
+    }
+
+    if (tactixUp == false) {
+        tactixUp = true;
+    }
+    else {
+        console.log("Removing tactix");
+        var index = comparing.indexOf("Canterbury Tactix");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        tactixUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+//nsw swifts buttons
+function mouseOverSwiftsMDown() {
+    document.images["swiftsButton"].src = "data/NewSouthWalesSwifts.png";
+
+    return true;
+}
+
+var swiftsUp = false;
+function mouseOverSwiftsMUp() {
+
+    if (swiftsUp == false) {
+        //console.log("Pushing swifts");
+        comparing.push("New South Wales Swifts");
+        document.images["swiftsButton"].src = "data/white/NewSouthWalesSwiftsWhite.jpg";
+    }
+
+    if (swiftsUp == false) {
+        swiftsUp = true;
+    }
+    else {
+        console.log("Removing swifts");
+        var index = comparing.indexOf("New South Wales Swifts");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        swiftsUp = false;
+    }
+    //console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+// adeliade thundebrids buttons
+function mouseOverThunderMDown() {
+    document.images["thunderButton"].src = "data/AdelaideThunderbirds.png";
+
+    return true;
+}
+var thunderUp = false;
+function mouseOverThunderMUp() {
+    if (thunderUp == false) {
+        //console.log("Pushing thunder");
+        comparing.push("Adelaide Thunderbirds");
+        document.images["thunderButton"].src = "data/white/AdelaideThunderbirdsWhite.jpg";
+    }
+    //console.log(comparing);
+
+    if (thunderUp == false) {
+
+        thunderUp = true;
+    }
+    else {
+        //console.log("Removing thunder");
+        var index = comparing.indexOf("Adelaide Thunderbirds");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        thunderUp = false;
+    }
+    console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+
+//melbourne vixens buttons
+function mouseOverVixensMDown() {
+    document.images["vixensButton"].src = "data/MelbourneVixens.png";
+
+    return true;
+}
+var vixensUp = false;
+function mouseOverVixensMUp() {
+    if (vixensUp == false) {
+        //console.log("Pushing vixens");
+        comparing.push("Melbourne Vixens");
+        document.images["vixensButton"].src = "data/white/MelbourneVixensWhite.jpg";
+    }
+
+    if (vixensUp == false) {
+        vixensUp = true;
+    }
+    else {
+        //console.log("Removing vixens");
+        var index = comparing.indexOf("Melbourne Vixens");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        vixensUp = false;
+    }
+    console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+
+}
+
+//fever button
+function mouseOverFeverMDown() {
+    document.images["feverButton"].src = "data/WestCoastFever.png";
+
+    return true;
+}
+var feverUp = false;
+function mouseOverFeverMUp() {
+    if (feverUp == false) {
+        //console.log("Pushing fever");
+        comparing.push("West Coast Fever");
+        document.images["feverButton"].src = "data/white/WestCoastFeverWhite.jpg";
+    }
+
+    if (feverUp == false) {
+        feverUp = true;
+    }
+    else {
+        //console.log("Removing fever");
+        var index = comparing.indexOf("West Coast Fever");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        feverUp = false;
+    }
+    console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+
+}
+
+//firebirds button
+function mouseOverFirebirdsMDown() {
+    document.images["firebirdsButton"].src = "data/QueenslandFirebirds.png";
+
+    return true;
+}
+var firebirdsUp = false;
+function mouseOverFirebirdsMUp() {
+    if (firebirdsUp == false) {
+        //console.log("Pushing firebirds");
+        comparing.push("Queensland Firebirds");
+        document.images["firebirdsButton"].src = "data/white/QueenslandFirebirdsWhite.jpg";
+    }
+
+    if (firebirdsUp == false) {
+        firebirdsUp = true;
+    }
+    else {
+        //console.log("Removing firebirds");
+        var index = comparing.indexOf("Queensland Firebirds");
+        if (index > -1) {
+            comparing.splice(index, 1);
+        }
+        firebirdsUp = false;
+    }
+    console.log(comparing);
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+    d3.select("svg").remove();
+    manipulateData();
+    return true;
+}
+
+
+
+
+
+
+d3.select("body").style("background-color", "#58ACFA");
+    currentYear = getYearForm();
+    currentRound = getRoundForm();
+
+
+
+
+
+</script>
+
+</body>
+</html>
+
