@@ -1,0 +1,130 @@
+body {
+    font: 10px sans-serif;}
+
+#title {
+    text-align: center;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px black;
+    border-color: #FFFAF0;
+    background-color: #2E9AFE;}
+
+#teams{
+    text-align: center;
+    background-color: #58ACFA;}
+
+#ANZ {
+    text-align: center;}
+
+#rounds {
+    text-align: left;
+    color: blue; }
+
+#years {
+    text-align: left;
+    color: blue;}
+
+#table {
+    border-collapse: collapse;
+    border: 2px black solid;
+    font: 12px sans-serif;
+    text-align: center;}
+
+#td {
+    border: 1px black solid;
+    padding: 5px;
+    text-align: center;}
+
+.bar {
+    fill: #1b8053;}
+
+.text{
+    fill: black;}
+
+.axis {
+    font: 10px sans-serif;
+    fill: white;}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;}
+
+.arc path {
+    stroke: #fff;}
+
+.x.axis path {
+    display: none;}
+
+table {
+    border-collapse: collapse;
+    border: 2px black solid;
+    font: 12px sans-serif;}
+
+td {
+    border: 1px black solid;
+    padding: 5px;}
+
+*{box-sizing: border-box;}
+
+.header {
+    background-color: #000000;
+    padding: 15px;}
+
+.row:after {
+    content: "";
+    clear: both;
+    background-color: #333333;
+    display: block;}
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    background-color: #333333;}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+.chart rect {
+    fill: steelblue;
+}
+.chart .legend {
+    fill: black;
+    font: 14px sans-serif;
+    text-anchor: start;
+    font-size: 12px;
+}
+
+.chart text {
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+
+.chart .label {
+    fill: black;
+    font: 14px sans-serif;
+    text-anchor: end;
+}
+
+.bar:hover {
+    fill: brown;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}

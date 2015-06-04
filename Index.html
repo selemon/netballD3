@@ -1,29 +1,38 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>ANZ Netball Championship</title>
     <link rel="shortcut icon" type="image/x-icon" href="data/anzico.ico">
+    <link rel="stylesheet" href="styles.css">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="deepCopy.js"></script>
-    <script type="text/javascript" src="bar.js"></script>
-
+    <script src="d3.min.js?v=3.2.8"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="script.js"></script>
+    <script src="js/jquery-1.11.1.min.js.js"></script>
+    <script src="js/cssmenumaker.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
         body {
-            /*border: 2px solid #2E9AFE;*/
             font: 10px sans-serif;}
 
         #title {
             text-align: center;
-            text-align: top;
+            text-align: center;
             color: white;
             text-shadow: 2px 2px black;
             border-color: #FFFAF0;
             background-color: #2E9AFE;}
 
-        #teams {
+        #teams{
             text-align: center;
             background-color: #58ACFA;}
 
+        #ANZ {
+            text-align: center;}
+        
         #rounds {
             text-align: left;
             color: blue; }
@@ -32,11 +41,22 @@
             text-align: left;
             color: blue;}
 
+        #table {
+        border-collapse: collapse;
+        border: 2px black solid;
+        font: 12px sans-serif;
+        text-align: center;}
+
+        #td {
+        border: 1px black solid;
+        padding: 5px;
+        text-align: center;}
+
         .bar {
             fill: #1b8053;}
 
         .text{
-            fill: blue;}
+            fill: black;}
 
         .axis {
             font: 10px sans-serif;
@@ -53,141 +73,202 @@
 
         .x.axis path {
             display: none;}
+
+        table {
+            border-collapse: collapse;
+            border: 2px black solid;
+            font: 12px sans-serif;}
+
+        td {
+            border: 1px black solid;
+            padding: 5px;}
+
+        *{box-sizing: border-box;}
+
+        .header {
+            background-color: #000000;
+            padding: 15px;}
+
+        .row:after {
+            content: "";
+            clear: both;
+            background-color: #333333;
+            display: block;}
+
+        [class*="col-"] {
+            float: left;
+            padding: 15px;
+            background-color: #333333;}
+
+        .col-1 {width: 8.33%;}
+        .col-2 {width: 16.66%;}
+        .col-3 {width: 25%;}
+        .col-4 {width: 33.33%;}
+        .col-5 {width: 41.66%;}
+        .col-6 {width: 50%;}
+        .col-7 {width: 58.33%;}
+        .col-8 {width: 66.66%;}
+        .col-9 {width: 75%;}
+        .col-10 {width: 83.33%;}
+        .col-11 {width: 91.66%;}
+        .col-12 {width: 100%;}
+
+.chart rect {
+  fill: steelblue;
+}
+
+.chart .legend {
+  fill: black;
+  font: 14px sans-serif;
+  text-anchor: start;
+  font-size: 12px;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.chart .label {
+  fill: black;
+  font: 14px sans-serif;
+  text-anchor: end;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
     </style>
 </head>
-
 <body>
-    <!-- OLD ANZ BANNER AT TOP OF PAGE
-<div id="anz">  
-    <a href="#" onMouseDown="return mouseOveranzMDown()" onMouseUp="return mouseOveranzMUp()">
-        <img name="anzButton" src="data/anz.png" width="100" height="100" border="0"
-            alt="javascript button"></a>
-</div>
--->
-<div id="title">
-    <h1 color="red"> 
-        <img name="nzteams" src="data/NZ.JPG" align="left" style="margin-left:285px" width="75" height="45" border="10"
-            alt="javascript button">
-        Australasian Netball Championship
-        <img name="nzteams" src="data/AUS.JPG" align="right" style="margin-right:285px" width="75" height="45" corder-color="clear" border="10"
-            alt="javascript button">
-        </h1></br></br>
-</div>
-
-<div id="teams">
+<div class="row"> 
+<div class="col-4">
+<img name="nzteams" src="data/NZ.JPG" align="left" style="margin-left:205px" width="95" height="65" border="8" alt="NZ Flag"></br></br></br></br></br>
 <!--NZ teams-->
     <a href="#" onMouseDown="return mouseOverPulseMDown()" onMouseUp="return mouseOverPulseMUp()">
-        <img name="pulseButton" src="data/CentralPulse.png" title="Central Pulse" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="pulseButton" src="data/CentralPulse.png" align="left" title="Central Pulse" width="100" height="100" border="5"
+            alt="Central Pulse"></a>
         
     <a href="#" onMouseDown="return mouseOverMysticsMDown()" onMouseUp="return mouseOverMysticsMUp()">
-        <img name="mysticsButton" src="data/NorthernMystics.png" title="Northern Mystics" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="mysticsButton" src="data/NorthernMystics.png" align="left" title="Northern Mystics" width="100" height="100" border="5"
+            alt="Northern Mystics"></a>
 
     <a href="#" onMouseDown="return mouseOverMagicMDown()" onMouseUp="return mouseOverMagicMUp()">
-        <img name="magicButton" src="data/WaikatoBayofPlentyMagic.png" title="Waikato Bay of Plenty Magics" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="magicButton" src="data/WaikatoBayofPlentyMagic.png" align="left" title="Waikato Bay of Plenty Magics" width="100" height="100" border="5"
+            alt="Waikato Bay of Plenty Magics"></a>
 
     <a href="#" onMouseDown="return mouseOverSteelMDown()" onMouseUp="return mouseOverSteelMUp()">
-        <img name="steelButton" src="data/SouthernSteel.png" title="Southern Steel" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="steelButton" src="data/SouthernSteel.png" align="left" title="Southern Steel" width="100" height="100" border="5"
+            alt="Southern Steel"></a>
 
     <a href="#" onMouseDown="return mouseOverTactixMDown()" onMouseUp="return mouseOverTactixMUp()">
-        <img name="tactixButton" src="data/CanterburyTactix.png" title="Canterbury Tactix" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="tactixButton" src="data/CanterburyTactix.png" align="left" title="Canterbury Tactix" width="100" height="100" border="5"
+            alt="Canterbury Tactix"></a>
 
-<!--ANZ SYMBOL-->
-    <a href="#" onMouseDown="return mouseOveranzMDown()" onMouseUp="return mouseOveranzMUp()">
-        <img name="anzButton" src="data/anz.png" align="center" style="margin-left:100px" width="180" height="180" border="0"
-            alt="javascript button"></a>
+</div>
 
-<!--AUS teams-->
-    <a href="#" onMouseDown="return mouseOverSwiftsMDown()" onMouseUp="return mouseOverSwiftsMUp()">
-        <img name="swiftsButton" src="data/NewSouthWalesSwifts.png" title="NSW Swifts" align="centre" style="margin-left:120px"
-            width="100" height="100" border="10" alt="javascript button"></a>
+<div class="col-4"> <a href="index.html" onMouseDown="return mouseOveranzMDown()" onMouseUp="return mouseOveranzMUp()">
+        <img name="anzButton" src="data/anz.png" align="left" style="margin-left:185px" width="170" height="170" border="0" alt="ANZ Championship Logo"></a>
+</div>
+
+<div class="col-4">
+<img name="nzteams" src="data/AUS.JPG" align="right" style="margin-right:205px" width="90" height="60" corder-color="clear" border="8"
+            alt="AUS Flag"></br></br></br></br></br>
+
+
+  <a href="#" onMouseDown="return mouseOverSwiftsMDown()" onMouseUp="return mouseOverSwiftsMUp()">
+        <img name="swiftsButton" src="data/NewSouthWalesSwifts.png" title="NSW Swifts" align="right"
+            width="100" height="100" border="5" alt="NSW Swifts"></a>
 
     <a href="#" onMouseDown="return mouseOverThunderMDown()" onMouseUp="return mouseOverThunderMUp()">
-        <img name="thunderButton" src="data/AdelaideThunderbirds.png" title="Adalaide Thunderbirds" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="thunderButton" src="data/AdelaideThunderbirds.png" align="right" title="Adalaide Thunderbirds" width="100" height="100" border="5"
+            alt="Adalaide Thunderbirds"></a>
 
     <a href="#" onMouseDown="return mouseOverVixensMDown()" onMouseUp="return mouseOverVixensMUp()">
-        <img name="vixensButton" src="data/MelbourneVixens.png" title="Melbourne Vixens" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="vixensButton" src="data/MelbourneVixens.png" align="right" title="Melbourne Vixens" width="100" height="100" border="5"
+            alt="Melbourne Vixens"></a>
 
     <a href="#" onMouseDown="return mouseOverFeverMDown()" onMouseUp="return mouseOverFeverMUp()">
-        <img name="feverButton" src="data/WestCoastFever.png" title="West Coast Fever" width="100" height="100" border="10"
-            alt="javascript button"></a>
+        <img name="feverButton" src="data/WestCoastFever.png" align="right" title="West Coast Fever" width="100" height="100" border="5"
+            alt="West Coast Fever"></a>
 
     <a href="#" onMouseDown="return mouseOverFirebirdsMDown()" onMouseUp="return mouseOverFirebirdsMUp()">
-        <img name="firebirdsButton" src="data/QueenslandFirebirds.png" title="Queensland Firebirds" width="100" height="100" border="10"
-            alt="javascript button"></a>
-</div></br></br></br>
-
-
-<div id="years" >
-    <label align="left" style="margin-left:10px"><font size="2">Year Select:</font>
-        <select id="years2" align="left" style="margin-left:10px">
-            <option value="All Years" >All Years</option>
-            <option value="2008">2008</option>
-            <option value="2009">2009</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-        </select>
-    </label>
-</div></br>
-
-<div id="rounds">
-    <label><font size="2">Round Select:</font>
-        <select id="rounds2" align="left" style="margin-left:10px">
-            <option>All Rounds</option>
-            <option>Round 1</option>
-            <option>Round 2</option>
-            <option>Round 3</option>
-            <option>Round 4</option>
-            <option>Round 5</option>
-            <option>Round 6</option>
-            <option>Round 7</option>
-            <option>Round 8</option>
-            <option>Round 9</option>
-            <option>Round 10</option>
-            <option>Round 11</option>
-            <option>Round 12</option>
-            <option>Round 13</option>
-            <option>Round 14</option>
-            <option>Round 15</option>
-            <option>Round 16</option>
-            <option>Round 17</option>
-        </select>
-    </label>
-</div></br></br>
-
-<div id="refresh" align="left" style="margin-left:97px">
-    <button type="button" onclick="refreshGraph()">Display</button>
-</div></br><!--style="background-color:#33FFFF-->
-<div id="donutHome" align="left" style="margin-left:85px">
-    <button type="button2" onclick="makeDonutHome()">Home Wins</button>
-</div></br><!-- style="background-color:transparent"-->
-<div id="donutAway" align="left" style="margin-left:85px">
-    <button type="button3" onclick="makeDonutAway()">Away Wins</button>
-</div></br>
-
-
-<div class="chart">
+        <img name="firebirdsButton" src="data/QueenslandFirebirds.png" align="right" title="Queensland Firebirds" width="100" height="100" border="5"
+            alt="Queensland Firebirds"></a>
 </div>
+</div>
+</div>
+
+<!-- /////////////////////// MENU ///////////////////////////////////////////-->
+<div id='cssmenu'>
+<ul>
+   <li><a href='index.html'><span>Home</span></a></li>
+   <li class='active has-sub' id="years2"><a><span>Year</span></a>
+      <ul>
+         <li class='has-sub'><a value="allYears"><span>All Years</span></a></li>
+        <li id="2008"><a value="2008"><span>2008</span></a></li>
+        <li id="2009"><a value="2009"><span>2009</span></a></li>
+        <li class='has-sub'><a value="2010"><span>2010</span></a></li>
+        <li class='has-sub'><a value="2011"><span>2011</span></a></li>
+        <li class='has-sub'><a value="2012"><span>2012</span></a></li>
+
+      </ul>
+   </li>
+   </li>
+   <li class='active has-sub' id="rounds2"><a href='#'><span>Round</span></a>
+    <ul>
+        <li class='has-sub'><a href='#' value="AllRounds"><span>All Rounds</span></a></li>
+        <li class='has-sub'><a value="Round 1"><span>Round 1</span></a></li>
+        <li class='has-sub'><a value="Round 2"><span>Round 2</span></a></li>
+        <li class='has-sub'><a value="Round 3"><span>Round 3</span></a></li>
+        <li class='has-sub'><a value="Round 4"><span>Round 4</span></a></li>
+        <li class='has-sub'><a value="Round 5"><span>Round 5</span></a></li>
+        <li class='has-sub'><a value="Round 6"><span>Round 6</span></a></li>
+        <li class='has-sub'><a value="Round 7"><span>Round 7</span></a></li>
+        <li class='has-sub'><a value="Round 8"><span>Round 8</span></a></li>
+        <li class='has-sub'><a value="Round 9"><span>Round 9</span></a></li>
+        <li class='has-sub'><a value="Round 10"><span>Round 10</span></a></li>
+        <li class='has-sub'><a value="Round 11"><span>Round 11</span></a></li>
+        <li class='has-sub'><a value="Round 12"><span>Round 12</span></a></li>
+        <li class='has-sub'><a value="Round 13"><span>Round 13</span></a></li>
+        <li class='has-sub'><a value="Round 14"><span>Round 14</span></a></li>
+        <li class='has-sub'><a value="Round 15"><span>Round 15</span></a></li>
+        <li class='has-sub'><a value="Round 16"><span>Round 16</span></a></li>
+        <li class='has-sub'><a value="Round 17"><span>Round 17</span></a></li>
+        <li class='has-sub'><a value="Finals"><span>Finals</span></a></li>
+
+      </ul>
+   </li>
+   </li>
+   <li class='last'><a href='#'><span>          </span></a></li>
+   <li id="display"><a onclick="chosen()"><span>Display</span></a></li>
+   <li id="totalWins" onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
+   <li id="H2H"><a onclick="H2H()"><span>Head to Head</span></a></li>
+   <li id="ChampStats"><a ><span>Champions Stats</span></a></li>
+   <li id="showAllByes"><a onclick="showByes()"><span>Show Byes</span></a></li>
+   <li id="showAllData"><a onclick="showData()"><span>Show All Data</span></a></li>
+</ul>
+</div>
+<!-- /////////////////////// MENU END ///////////////////////////////////////////-->
+
+<!--//////////////////////////////////////////////////////////////////////////////////-->
+
+<div class="chart"></div>
+<svg class="chart"></svg>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-//read in data. x
-// make buttons. x
-// makee graphs.
-// after that done
-
-
-
-
 var comparing = [];
-
+function clear(elementID){
+document.getElementById(elementID).innerHTML="";
+}
 function refreshGraph(){
     currentYear = getYearForm();
     currentRound = getRoundForm();
@@ -195,7 +276,6 @@ function refreshGraph(){
     manipulateData();
 }
 //get all aus teams
-
 function getAllAusDown(){
     mouseOverFeverMDown();
     mouseOverThunderMDown();
@@ -210,7 +290,7 @@ function getAllAusUp(){
     mouseOverVixensMUp();
     mouseOverSwiftsMUp();
 }
-
+//get all NZ teams
 function getAllNzDown(){
     mouseOverMagicMDown();
     mouseOverSteelMDown();
@@ -238,22 +318,517 @@ function makeDonutAway(){
     d3.select("svg").remove();
     manipulateDataDonut(false);
 }
+/////////////////////// SHOW ALL BYES /////////////////////////////////////////////////////
+function showByes(){
+    d3.text("Byes.csv", function(data) {               
+                var parsedCSV = d3.csv.parseRows(data);
+                var container = d3.select("body")
+                    .append("table")
+                    .selectAll("tr")
+                        .data(parsedCSV).enter()
+                        .append("tr")
+                    .selectAll("td")
+                        .data(function(d) { return d; }).enter()
+                        .append("td")
+                        .text(function(d) { return d; });
+            });
+}
+////////////////////// SHOW ALL BYES ENDS ///////////////////////////////////////////////////
+////////////////////// SHOW ALL DATA ////////////////////////////////////////////////////////
+function showData(){
+    d3.text("fullDataNoByes.csv", function(data) {               
+                var parsedCSV = d3.csv.parseRows(data);
+                var container = d3.select("body")
+                    .append("table")
+                    .selectAll("tr")
+                        .data(parsedCSV).enter()
+                        .append("tr")
+                    .selectAll("td")
+                        .data(function(d) { return d; }).enter()
+                        .append("td")
+                        .text(function(d) { return d; });
+            });
+}
+///////////////////// SHOW ALL DATA ENDS ////////////////////////////////////////////////////
+var k;
+var m;
+function chosen(){
+    file = d3.select("body").select("#years2").node().value;
+    file = file+"-Table1.csv";       
+    round = d3.select("body").select("#rounds2").node().value;
+d3.csv(file, function(error, data) { 
+    m = data;
+    m.forEach(function(d){
+        if(d["Round"]===round){
+            k.push(d);
+        }
+    
+        var parsedCSV = d3.csv.parseRows(k);
+        var container = d3.select("body")
+        .append("table")
+        .selectAll("tr")
+        .data(parsedCSV).enter()
+        .append("tr")
+        .selectAll("td")
+        .data(function(d) { return d; }).enter()
+        .append("td")
+        .text(function(d) { return d; });
+    });
+    }); 
+}
+////////////////// HEAD TO HEAD ///////////////////////////////////////////////////////////
+function H2H(){
+var data = {
+  labels: [
+    'resilience', 'maintainability', 'accessibility',
+    'uptime', 'functionality', 'impact'
+  ],
+  series: [
+    {
+      label: '2012',
+      values: [4, 8, 15, 16, 23, 42]
+    },
+    {
+      label: '2013',
+      values: [12, 43, 22, 11, 73, 25]
+    },
+    {
+      label: '2014',
+      values: [31, 28, 14, 8, 15, 21]
+    },]
+};
 
+var chartWidth       = 300,
+    barHeight        = 20,
+    groupHeight      = barHeight * data.series.length,
+    gapBetweenGroups = 10,
+    spaceForLabels   = 150,
+    spaceForLegend   = 150;
+
+// Zip the series data together (first values, second values, etc.)
+var zippedData = [];
+for (var i=0; i<data.labels.length; i++) {
+  for (var j=0; j<data.series.length; j++) {
+    zippedData.push(data.series[j].values[i]);
+  }
+}
+
+// Color scale
+var color = d3.scale.category20();
+var chartHeight = barHeight * zippedData.length + gapBetweenGroups * data.labels.length;
+
+var x = d3.scale.linear()
+    .domain([0, d3.max(zippedData)])
+    .range([0, chartWidth]);
+
+var y = d3.scale.linear()
+    .range([chartHeight + gapBetweenGroups, 0]);
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .tickFormat('')
+    .tickSize(0)
+    .orient("left");
+
+// Specify the chart area and dimensions
+var chart = d3.select(".chart")
+    .attr("width", spaceForLabels + chartWidth + spaceForLegend)
+    .attr("height", chartHeight);
+
+// Create bars
+var bar = chart.selectAll("g")
+    .data(zippedData)
+    .enter().append("g")
+    .attr("transform", function(d, i) {
+      return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i/data.series.length))) + ")";
+    });
+
+// Create rectangles of the correct width
+bar.append("rect")
+    .attr("fill", function(d,i) { return color(i % data.series.length); })
+    .attr("class", "bar")
+    .attr("width", x)
+    .attr("height", barHeight - 1);
+
+// Add text label in bar
+bar.append("text")
+    .attr("x", function(d) { return x(d) - 3; })
+    .attr("y", barHeight / 2)
+    .attr("fill", "red")
+    .attr("dy", ".35em")
+    .text(function(d) { return d; });
+
+// Draw labels
+bar.append("text")
+    .attr("class", "label")
+    .attr("x", function(d) { return - 10; })
+    .attr("y", groupHeight / 2)
+    .attr("dy", ".35em")
+    .text(function(d,i) {
+      if (i % data.series.length === 0)
+        return data.labels[Math.floor(i/data.series.length)];
+      else
+        return ""});
+
+chart.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + spaceForLabels + ", " + -gapBetweenGroups/2 + ")")
+      .call(yAxis);
+
+// Draw legend
+var legendRectSize = 18,
+    legendSpacing  = 4;
+
+var legend = chart.selectAll('.legend')
+    .data(data.series)
+    .enter()
+    .append('g')
+    .attr('transform', function (d, i) {
+        var height = legendRectSize + legendSpacing;
+        var offset = -gapBetweenGroups/2;
+        var horz = spaceForLabels + chartWidth + 40 - legendRectSize;
+        var vert = i * height - offset;
+        return 'translate(' + horz + ',' + vert + ')';
+    });
+
+legend.append('rect')
+    .attr('width', legendRectSize)
+    .attr('height', legendRectSize)
+    .style('fill', function (d, i) { return color(i); })
+    .style('stroke', function (d, i) { return color(i); });
+
+legend.append('text')
+    .attr('class', 'legend')
+    .attr('x', legendRectSize + legendSpacing)
+    .attr('y', legendRectSize - legendSpacing)
+    .text(function (d) { return d.label;});
+}
+
+//////////////////// HEAD TO HEAD ENDS ///////////////////////////////////////////////////
+</script>
+
+<!--///////////// TOTAL WINS GRAPH ////////////////////////////////////////////////////-->
+<div id="bar"><p>
+</div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+    d3.select("body").select("#bar").attr("width", 1000).attr("height", 1000);
+    var file = "2012-Table1.csv";
+    var button4 = d3.select("body").select("#totalWins");
+    button4.on("click", function(){
+        file = d3.select("#years2").node().value;
+        file = file+"-Table1.csv";
+//        alert(file);
+        read();
+    });
+
+    var h = 1000;
+    var w = 1000;
+    var height = 1000;
+    var width = 1000;
+    var padding = 80;
+    var ds;
+    var map = new Object();
+//    read();
+    function read(){
+        d3.csv(file, function(error, data) {
+            map = new Object();
+            initializeTeams();
+            ds = data;
+
+            if(file==="2008-Table1.csv"||file==="2009-Table1.csv"){
+            for (var i =0;i<ds.length;i++) {
+                        var temp = ds[i];
+                        if (temp["Date"].substring(0,5)==="BYES:") {
+                            ds.splice(i,1);
+                        }
+                        else {
+                            var first = temp["Score"].substring(0,2);
+                            var second = temp["Score"].substring(3,5);
+                            ds[i]["Score"] = first+" – "+second;
+                        }
+                      }
+                }
+            ds.forEach(function (d) {
+                d["Score1"] = +d['Score'].split(' – ')[0]
+                d["Score2"] = +d['Score'].split(' – ')[1]
+                d["Round"] = +d.Round;
+                //if (d.Venue.length !== (0)) {
+                d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
+                var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
+                d["Outcome"] = winner;
+                if (winner == "draw" && d.Venue.length !== (0)) {
+                }
+                if (winner === d["Home Team"] && d.Venue.length !== (0)) {
+                    map[winner]["points"] += 2;
+                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
+                    d["Loss"] = d["Away Team"];
+                }
+                if (winner === d["Away Team"] && d.Venue.length !== (0)) {
+                    map[winner]["points"] += 2;
+                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
+                    d["Lost"] = d["Home Team"];
+                }
+                //console.log(d);
+                //}
+                //console.log(map);
+            });
+            calculateTotalPointsPerSeason(ds);
+            calculateTotalWinLoss();
+            drawGraph(ds);
+        });
+    }
+    function drawGraph(data){
+            d3.select("svg")
+                    .remove();
+            w = 800;
+            h = 800;
+            var path = d3.geo.path();
+            var svg = d3.select("body").select("#bar").append("svg").attr({
+                width: w,
+                height: h
+            });
+            var teams = new Array();
+            var points = new Array();
+            for (var key in map) {
+                teams.push(map[key]);
+            }
+            var bars = svg.selectAll("rect")
+                    .data(teams)
+                    .enter()
+                    .append("rect")
+                    .attr("width", 0)
+                    .attr("height", 30)
+                    .attr("fill", "white")
+                    .attr("stroke-width", 2)
+                    .attr("stroke", "white")
+                    .transition()
+                    .duration(1500)
+                    .attr("fill", function(d){return TeamcolorPicker(d.name)})
+                    .attr("width", function(d){return d.numOfWins*40;})
+                    .attr("stroke", "black")
+                    .attr("x", 300)
+                    .attr("y", function(d, i){return i*30+12})
+                    .attr("ry", 5);
+            svg.selectAll("text")
+                    .data(teams)
+                    .enter()
+                    .append("text")
+                    .attr("fill", "white")
+                    .attr("stroke", "white")
+                    .transition()
+                    .duration(1500)
+                    .attr("fill", "black")
+                    .attr("stroke", "black")
+                    .attr("x", 80)
+                    .attr("y", function(d, i){return 30*i+30;})
+                    .text(function(d, i){return d.name+" - "+d.numOfWins;});
+            var rect = svg.selectAll("rect");
+            rect.on("mouseover", function(){
+                rect.transition()
+                        .duration(0)
+                        .attr('opacity', 0.33);
+                d3.select(this).transition()
+                        .duration(500)
+                        .attr('opacity', 1);
+            }).on("mouseout", function(){
+                rect.transition()
+                        .duration(0)
+                        .attr('opacity', 1);
+            });
+        }
+        function getMap(k) {
+        return map[k];
+    }
+    function calculateTotalPointsPerSeason(ds) {
+        ds.forEach(function (d) {
+            if (d.Venue.length !== (0)) {
+                getMap(d["Home Team"]).Total += d.Score1;
+                getMap(d["Away Team"]).Total += d.Score1;
+            }
+        });
+    }
+    //calculate the total number of wins for each team
+    //also games played
+    function calculateTotalWinLoss() {
+        ds.forEach(function (d) {
+            if (d.Venue.length !== (0)) {
+                getMap(d["Home Team"]).gamesPlayed++;
+                getMap(d["Away Team"]).gamesPlayed++;
+                var homeTeamScore = d.Score1;
+                var awayTeamScore = d.Score2;
+                if (homeTeamScore > awayTeamScore) {
+                    getMap(d["Home Team"]).numOfWins++;
+                    getMap(d["Away Team"]).numOfLosses++;
+                } else if (homeTeamScore < awayTeamScore) {
+                    getMap(d["Away Team"]).numOfWins++;
+                    getMap(d["Home Team"]).numOfLosses++;
+                } else {
+                }
+            }
+        });
+    }
+    //compare the the score between two teams and determine
+    //the winner
+    function findWinner(team1, score1, team2, score2) {
+        if (score1 > score2) {
+            return team1;
+        }
+        if (score1 === score2) {
+            return "draw";
+        } else {
+            return team2;
+        }
+    }
+    function getOutcome(data){
+        if(data>0){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+    function initializeTeams() {
+        map["New South Wales Swifts"] = {
+            name: "New South Wales Swifts",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Adelaide Thunderbirds"] = {
+            name: "Adelaide Thunderbirds",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Queensland Firebirds"] = {
+            name: "Queensland Firebirds",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Melbourne Vixens"] = {
+            name: "Melbourne Vixens",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Northern Mystics"] = {
+            name: "Northern Mystics",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Central Pulse"] = {
+            name: "Central Pulse",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Southern Steel"] = {
+            name: "Southern Steel",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Waikato Bay of Plenty Magic"] = {
+            name: "Waikato Bay of Plenty Magic",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["West Coast Fever"] = {
+            name: "West Coast Fever",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        map["Canterbury Tactix"] = {
+            name: "Canterbury Tactix",
+            Total: 0,
+            numOfWins: 0,
+            numOfLosses: 0,
+            points: 0,
+            numOfGamesToPoints: [],
+            gamesPlayed: 0
+        }
+        //console.log(teams);
+    }
+    function TeamcolorPicker(team) {
+        if (team === ("New South Wales Swifts")) {
+            return "#2E2EFE";
+        }
+        if (team === ("Waikato Bay of Plenty Magic")) {
+            return "#D0FA58";
+        }
+        if (team === ("Southern Steel")) {
+            return "#088A85";
+        }
+        if (team === ("Central Pulse")) {
+            return "#FFFF00";
+        }
+        if (team === ("Northern Mystics")) {
+            return "#240B3B";
+        }
+        if (team === ("Melbourne Vixens")) {
+            return "#04B404";
+        }
+        if (team === ("Queensland Firebirds")) {
+            return "#FF8000";
+        }
+        if (team === ("Adelaide Thunderbirds")) {
+            return "#DF01D7";
+        }
+        if (team === ("Canterbury Tactix")) {
+            return "#FF0000";
+        }
+        if (team === ("West Coast Fever")) {
+            return "#0B3B17";
+        }
+    }
+
+/////////////////////// TEAM BUTTONS///////////////////////////////////////////////////
 //central pulse buttons
 function mouseOverPulseMDown() {
     document.images["pulseButton"].src = "data/CentralPulse.png";
-
     return true;
 }
 var pulseUp = false;
 function mouseOverPulseMUp() {
-
     if (pulseUp == false) {
         //console.log("Pushing pulse");
         comparing.push("Central Pulse");
         document.images["pulseButton"].src = "data/white/CentralPulseWhite.jpg";
     }
-
     if (pulseUp == false) {
         pulseUp = true;
     }
@@ -270,17 +845,13 @@ function mouseOverPulseMUp() {
     currentRound = getRoundForm();
     d3.select("svg").remove();
     manipulateData();
-
     return true;
 }
-
 //northern mystics buttons
 function mouseOverMysticsMDown() {
     document.images["mysticsButton"].src = "data/NorthernMystics.png";
-
     return true;
 }
-
 var mysticsUp = false;
 function mouseOverMysticsMUp() {
     if (mysticsUp == false) {
@@ -288,7 +859,6 @@ function mouseOverMysticsMUp() {
         comparing.push("Northern Mystics");
         document.images["mysticsButton"].src = "data/white/NorthernMysticsWhite.jpg";
     }
-
     if (mysticsUp == false) {
         mysticsUp = true;
     }
@@ -307,11 +877,9 @@ function mouseOverMysticsMUp() {
     manipulateData();
     return true;
 }
-
 //magic button
 function mouseOverMagicMDown() {
     document.images["magicButton"].src = "data/WaikatoBayofPlentyMagic.png";
-
     return true;
 }
 var magicUp = false;
@@ -321,7 +889,6 @@ function mouseOverMagicMUp() {
         comparing.push("Waikato Bay of Plenty Magic");
         document.images["magicButton"].src = "data/white/WaikatoBayofPlentyMagicWhite.jpg";
     }
-
     if (magicUp == false) {
         magicUp = true;
     }
@@ -340,11 +907,9 @@ function mouseOverMagicMUp() {
     manipulateData();
     return true;
 }
-
 //steel button
 function mouseOverSteelMDown() {
     document.images["steelButton"].src = "data/SouthernSteel.png";
-
     return true;
 }
 var steelUp = false;
@@ -354,7 +919,6 @@ function mouseOverSteelMUp() {
         comparing.push("Southern Steel");
         document.images["steelButton"].src = "data/white/SouthernSteelWhite.jpg";
     }
-
     if (steelUp == false) {
         steelUp = true;
     }
@@ -373,14 +937,11 @@ function mouseOverSteelMUp() {
     manipulateData();
     return true;
 }
-
 //canterbury tactix button
 function mouseOverTactixMDown() {
     document.images["tactixButton"].src = "data/CanterburyTactix.png";
-
     return true;
 }
-
 var tactixUp = false;
 function mouseOverTactixMUp() {
     if (tactixUp == false) {
@@ -388,7 +949,6 @@ function mouseOverTactixMUp() {
         comparing.push("Canterbury Tactix");
         document.images["tactixButton"].src = "data/white/CanterburyTactixWhite.jpg";
     }
-
     if (tactixUp == false) {
         tactixUp = true;
     }
@@ -407,23 +967,18 @@ function mouseOverTactixMUp() {
     manipulateData();
     return true;
 }
-
 //nsw swifts buttons
 function mouseOverSwiftsMDown() {
     document.images["swiftsButton"].src = "data/NewSouthWalesSwifts.png";
-
     return true;
 }
-
 var swiftsUp = false;
 function mouseOverSwiftsMUp() {
-
     if (swiftsUp == false) {
         //console.log("Pushing swifts");
         comparing.push("New South Wales Swifts");
         document.images["swiftsButton"].src = "data/white/NewSouthWalesSwiftsWhite.jpg";
     }
-
     if (swiftsUp == false) {
         swiftsUp = true;
     }
@@ -442,11 +997,9 @@ function mouseOverSwiftsMUp() {
     manipulateData();
     return true;
 }
-
 // adeliade thundebrids buttons
 function mouseOverThunderMDown() {
     document.images["thunderButton"].src = "data/AdelaideThunderbirds.png";
-
     return true;
 }
 var thunderUp = false;
@@ -457,7 +1010,6 @@ function mouseOverThunderMUp() {
         document.images["thunderButton"].src = "data/white/AdelaideThunderbirdsWhite.jpg";
     }
     //console.log(comparing);
-
     if (thunderUp == false) {
 
         thunderUp = true;
@@ -477,12 +1029,9 @@ function mouseOverThunderMUp() {
     manipulateData();
     return true;
 }
-
-
 //melbourne vixens buttons
 function mouseOverVixensMDown() {
     document.images["vixensButton"].src = "data/MelbourneVixens.png";
-
     return true;
 }
 var vixensUp = false;
@@ -492,7 +1041,6 @@ function mouseOverVixensMUp() {
         comparing.push("Melbourne Vixens");
         document.images["vixensButton"].src = "data/white/MelbourneVixensWhite.jpg";
     }
-
     if (vixensUp == false) {
         vixensUp = true;
     }
@@ -510,13 +1058,10 @@ function mouseOverVixensMUp() {
     d3.select("svg").remove();
     manipulateData();
     return true;
-
 }
-
 //fever button
 function mouseOverFeverMDown() {
     document.images["feverButton"].src = "data/WestCoastFever.png";
-
     return true;
 }
 var feverUp = false;
@@ -526,7 +1071,6 @@ function mouseOverFeverMUp() {
         comparing.push("West Coast Fever");
         document.images["feverButton"].src = "data/white/WestCoastFeverWhite.jpg";
     }
-
     if (feverUp == false) {
         feverUp = true;
     }
@@ -544,13 +1088,10 @@ function mouseOverFeverMUp() {
     d3.select("svg").remove();
     manipulateData();
     return true;
-
 }
-
 //firebirds button
 function mouseOverFirebirdsMDown() {
     document.images["firebirdsButton"].src = "data/QueenslandFirebirds.png";
-
     return true;
 }
 var firebirdsUp = false;
@@ -560,7 +1101,6 @@ function mouseOverFirebirdsMUp() {
         comparing.push("Queensland Firebirds");
         document.images["firebirdsButton"].src = "data/white/QueenslandFirebirdsWhite.jpg";
     }
-
     if (firebirdsUp == false) {
         firebirdsUp = true;
     }
@@ -579,21 +1119,13 @@ function mouseOverFirebirdsMUp() {
     manipulateData();
     return true;
 }
-
-
-
-
-
-
 d3.select("body").style("background-color", "#58ACFA");
-    currentYear = getYearForm();
-    currentRound = getRoundForm();
-
-
-
-
-
+    //currentYear = getYearForm();
+    //currentRound = getRoundForm();
 </script>
+
+
+<!-- TOTAL WINS GRAPH ENDS //////////////////////////////////////////////////////////// -->
 
 </body>
 </html>
