@@ -4,13 +4,8 @@
     <title>ANZ Netball Championship</title>
     <link rel="shortcut icon" type="image/x-icon" href="data/anzico.ico">
     <link rel="stylesheet" href="styles.css">
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="deepCopy.js"></script>
-    <script src="d3.min.js?v=3.2.8"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <script src="script.js"></script>
-    <script src="js/jquery-1.11.1.min.js.js"></script>
-    <script src="js/cssmenumaker.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -153,23 +148,23 @@
 <div class="col-4">
 <img name="nzteams" src="data/NZ.JPG" align="left" style="margin-left:205px" width="95" height="65" border="8" alt="NZ Flag"></br></br></br></br></br>
 <!--NZ teams-->
-    <a href="#" onMouseDown="return mouseOverPulseMDown()" onMouseUp="return mouseOverPulseMUp()">
+    <a id="pulse" href="#" onMouseDown="return mouseOverPulseMDown()" onMouseUp="return mouseOverPulseMUp()">
         <img name="pulseButton" src="data/CentralPulse.png" align="left" title="Central Pulse" width="100" height="100" border="5"
             alt="Central Pulse"></a>
         
-    <a href="#" onMouseDown="return mouseOverMysticsMDown()" onMouseUp="return mouseOverMysticsMUp()">
+    <a id="mystic" href="#" onMouseDown="return mouseOverMysticsMDown()" onMouseUp="return mouseOverMysticsMUp()">
         <img name="mysticsButton" src="data/NorthernMystics.png" align="left" title="Northern Mystics" width="100" height="100" border="5"
             alt="Northern Mystics"></a>
 
-    <a href="#" onMouseDown="return mouseOverMagicMDown()" onMouseUp="return mouseOverMagicMUp()">
+    <a id="magic" href="#" onMouseDown="return mouseOverMagicMDown()" onMouseUp="return mouseOverMagicMUp()">
         <img name="magicButton" src="data/WaikatoBayofPlentyMagic.png" align="left" title="Waikato Bay of Plenty Magics" width="100" height="100" border="5"
             alt="Waikato Bay of Plenty Magics"></a>
 
-    <a href="#" onMouseDown="return mouseOverSteelMDown()" onMouseUp="return mouseOverSteelMUp()">
+    <a id="steel" href="#" onMouseDown="return mouseOverSteelMDown()" onMouseUp="return mouseOverSteelMUp()">
         <img name="steelButton" src="data/SouthernSteel.png" align="left" title="Southern Steel" width="100" height="100" border="5"
             alt="Southern Steel"></a>
 
-    <a href="#" onMouseDown="return mouseOverTactixMDown()" onMouseUp="return mouseOverTactixMUp()">
+    <a id="tactix" href="#" onMouseDown="return mouseOverTactixMDown()" onMouseUp="return mouseOverTactixMUp()">
         <img name="tactixButton" src="data/CanterburyTactix.png" align="left" title="Canterbury Tactix" width="100" height="100" border="5"
             alt="Canterbury Tactix"></a>
 
@@ -184,23 +179,23 @@
             alt="AUS Flag"></br></br></br></br></br>
 
 
-  <a href="#" onMouseDown="return mouseOverSwiftsMDown()" onMouseUp="return mouseOverSwiftsMUp()">
+  <a id="swift" href="#" onMouseDown="return mouseOverSwiftsMDown()" onMouseUp="return mouseOverSwiftsMUp()">
         <img name="swiftsButton" src="data/NewSouthWalesSwifts.png" title="NSW Swifts" align="right"
             width="100" height="100" border="5" alt="NSW Swifts"></a>
 
-    <a href="#" onMouseDown="return mouseOverThunderMDown()" onMouseUp="return mouseOverThunderMUp()">
+    <a id="thunder" href="#" onMouseDown="return mouseOverThunderMDown()" onMouseUp="return mouseOverThunderMUp()">
         <img name="thunderButton" src="data/AdelaideThunderbirds.png" align="right" title="Adalaide Thunderbirds" width="100" height="100" border="5"
             alt="Adalaide Thunderbirds"></a>
 
-    <a href="#" onMouseDown="return mouseOverVixensMDown()" onMouseUp="return mouseOverVixensMUp()">
+    <a id="vixens" href="#" onMouseDown="return mouseOverVixensMDown()" onMouseUp="return mouseOverVixensMUp()">
         <img name="vixensButton" src="data/MelbourneVixens.png" align="right" title="Melbourne Vixens" width="100" height="100" border="5"
             alt="Melbourne Vixens"></a>
 
-    <a href="#" onMouseDown="return mouseOverFeverMDown()" onMouseUp="return mouseOverFeverMUp()">
+    <a id="fever" href="#" onMouseDown="return mouseOverFeverMDown()" onMouseUp="return mouseOverFeverMUp()">
         <img name="feverButton" src="data/WestCoastFever.png" align="right" title="West Coast Fever" width="100" height="100" border="5"
             alt="West Coast Fever"></a>
 
-    <a href="#" onMouseDown="return mouseOverFirebirdsMDown()" onMouseUp="return mouseOverFirebirdsMUp()">
+    <a id="fire" href="#" onMouseDown="return mouseOverFirebirdsMDown()" onMouseUp="return mouseOverFirebirdsMUp()">
         <img name="firebirdsButton" src="data/QueenslandFirebirds.png" align="right" title="Queensland Firebirds" width="100" height="100" border="5"
             alt="Queensland Firebirds"></a>
 </div>
@@ -211,14 +206,16 @@
 <div id='cssmenu'>
 <ul>
    <li><a href='index.html'><span>Home</span></a></li>
-   <li class='active has-sub' id="years2"><a><span>Year</span></a>
+   <li class='active has-sub' id="years2"><a href='#'><span id="y">Year</span></a>
       <ul>
-         <li class='has-sub'><a value="allYears"><span>All Years</span></a></li>
-        <li id="2008"><a value="2008"><span>2008</span></a></li>
-        <li id="2009"><a value="2009"><span>2009</span></a></li>
-        <li class='has-sub'><a value="2010"><span>2010</span></a></li>
-        <li class='has-sub'><a value="2011"><span>2011</span></a></li>
-        <li class='has-sub'><a value="2012"><span>2012</span></a></li>
+         <li id="allYears" class='has-sub'><a value="allYears"><span>All Years</span></a></li>
+        <li id="y2008" class='has-sub'><a href='#' value="2008"><span>2008</span></a></li>
+        <li id="y2009" class='has-sub'><a href='#' value="2009"><span>2009</span></a></li>
+        <li id="y2010" class='has-sub'><a href='#' value="2010"><span>2010</span></a></li>
+        <li id="y2011" class='has-sub'><a href='#' value="2011"><span>2011</span></a></li>
+        <li id="y2012" class='has-sub'><a href='#' value="2012"><span>2012</span></a></li>
+          <li id="y2013" class='has-sub'><a href='#' value="2013"><span>2013</span></a></li>
+
 
       </ul>
    </li>
@@ -226,35 +223,35 @@
    <li class='active has-sub' id="rounds2"><a href='#'><span>Round</span></a>
     <ul>
         <li class='has-sub'><a href='#' value="AllRounds"><span>All Rounds</span></a></li>
-        <li class='has-sub'><a value="Round 1"><span>Round 1</span></a></li>
-        <li class='has-sub'><a value="Round 2"><span>Round 2</span></a></li>
-        <li class='has-sub'><a value="Round 3"><span>Round 3</span></a></li>
-        <li class='has-sub'><a value="Round 4"><span>Round 4</span></a></li>
-        <li class='has-sub'><a value="Round 5"><span>Round 5</span></a></li>
-        <li class='has-sub'><a value="Round 6"><span>Round 6</span></a></li>
-        <li class='has-sub'><a value="Round 7"><span>Round 7</span></a></li>
-        <li class='has-sub'><a value="Round 8"><span>Round 8</span></a></li>
-        <li class='has-sub'><a value="Round 9"><span>Round 9</span></a></li>
-        <li class='has-sub'><a value="Round 10"><span>Round 10</span></a></li>
-        <li class='has-sub'><a value="Round 11"><span>Round 11</span></a></li>
-        <li class='has-sub'><a value="Round 12"><span>Round 12</span></a></li>
-        <li class='has-sub'><a value="Round 13"><span>Round 13</span></a></li>
-        <li class='has-sub'><a value="Round 14"><span>Round 14</span></a></li>
-        <li class='has-sub'><a value="Round 15"><span>Round 15</span></a></li>
-        <li class='has-sub'><a value="Round 16"><span>Round 16</span></a></li>
-        <li class='has-sub'><a value="Round 17"><span>Round 17</span></a></li>
-        <li class='has-sub'><a value="Finals"><span>Finals</span></a></li>
+        <li class='has-sub'><a href='#'value="Round 1"><span>Round 1</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 2"><span>Round 2</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 3"><span>Round 3</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 4"><span>Round 4</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 5"><span>Round 5</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 6"><span>Round 6</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 7"><span>Round 7</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 8"><span>Round 8</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 9"><span>Round 9</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 10"><span>Round 10</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 11"><span>Round 11</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 12"><span>Round 12</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 13"><span>Round 13</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 14"><span>Round 14</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 15"><span>Round 15</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 16"><span>Round 16</span></a></li>
+        <li class='has-sub'><a href='#' value="Round 17"><span>Round 17</span></a></li>
+        <li class='has-sub'><a href='#' value="Finals"><span>Finals</span></a></li>
 
       </ul>
    </li>
    </li>
    <li class='last'><a href='#'><span>          </span></a></li>
-   <li id="display"><a onclick="chosen()"><span>Display</span></a></li>
-   <li id="totalWins" onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
-   <li id="H2H"><a onclick="H2H()"><span>Head to Head</span></a></li>
-   <li id="ChampStats"><a ><span>Champions Stats</span></a></li>
-   <li id="showAllByes"><a onclick="showByes()"><span>Show Byes</span></a></li>
-   <li id="showAllData"><a onclick="showData()"><span>Show All Data</span></a></li>
+   <li id="display"><a href='#' onclick="chosen()"><span>Display</span></a></li>
+   <li id="totalWins" href='#' onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
+   <li id="H2H"><a href='#' onclick="H2H()"><span>Head to Head</span></a></li>
+   <li id="ChampStats"><a href='#'><span>Champions Stats</span></a></li>
+   <li id="showAllByes"><a href='#' onclick="showByes()"><span>Show Byes</span></a></li>
+   <li id="showAllData"><a href='#' onclick="showData()"><span>Show All Data</span></a></li>
 </ul>
 </div>
 <!-- /////////////////////// MENU END ///////////////////////////////////////////-->
@@ -320,6 +317,10 @@ function makeDonutAway(){
 }
 /////////////////////// SHOW ALL BYES /////////////////////////////////////////////////////
 function showByes(){
+    d3.select("table")
+            .remove();
+    d3.select("svg")
+            .remove();
     d3.text("Byes.csv", function(data) {               
                 var parsedCSV = d3.csv.parseRows(data);
                 var container = d3.select("body")
@@ -330,12 +331,19 @@ function showByes(){
                     .selectAll("td")
                         .data(function(d) { return d; }).enter()
                         .append("td")
-                        .text(function(d) { return d; });
+                        .text(function(d) { return d; })
+                        .transition()
+                        .delay(500)
+                        ;
             });
 }
 ////////////////////// SHOW ALL BYES ENDS ///////////////////////////////////////////////////
 ////////////////////// SHOW ALL DATA ////////////////////////////////////////////////////////
 function showData(){
+    d3.select("table")
+            .remove();
+    d3.select("svg")
+            .remove();
     d3.text("fullDataNoByes.csv", function(data) {               
                 var parsedCSV = d3.csv.parseRows(data);
                 var container = d3.select("body")
@@ -346,15 +354,33 @@ function showData(){
                     .selectAll("td")
                         .data(function(d) { return d; }).enter()
                         .append("td")
-                        .text(function(d) { return d; });
+                        .text(function(d) { return d; })
+                        .transition()
+                        .delay(500)
+                        ;
             });
 }
 ///////////////////// SHOW ALL DATA ENDS ////////////////////////////////////////////////////
+
+//show all byes in a table
+var showBye = d3.select("body").select("#showAllByes");
+showBye.on("click", function(){
+   showByes();
+});
+
+//show all data
+var showD = d3.select("body").select("#showAllData");
+showD.on("click", function(){
+    showData();
+});
+
+
+
 var k;
 var m;
 function chosen(){
     file = d3.select("body").select("#years2").node().value;
-    file = file+"-Table1.csv";       
+    file = file+"-Table1.csv";
     round = d3.select("body").select("#rounds2").node().value;
 d3.csv(file, function(error, data) { 
     m = data;
@@ -510,14 +536,60 @@ legend.append('text')
 <!--///////////// TOTAL WINS GRAPH ////////////////////////////////////////////////////-->
 <div id="bar"><p>
 </div>
-<script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
+    function getYear(){
+        var y2008 = d3.select("body").select("#y2008");
+        y2008.on("click", function(){
+            year = 2008;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+        var y2009 = d3.select("body").select("#y2009");
+        y2009.on("click", function(){
+            year = 2009;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+        var y2010 = d3.select("body").select("#y2010");
+        y2010.on("click", function(){
+            year = 2010;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+        var y2011 = d3.select("body").select("#y2011");
+        y2011.on("click", function(){
+            year = 2011;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+        var y2012 = d3.select("body").select("#y2012");
+        y2012.on("click", function(){
+            year = 2012;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+        var y2013 = d3.select("body").select("#y2013");
+        y2013.on("click", function(){
+            year = 2013;
+            document.getElementById("y").innerHTML = year;
+//            alert(year);
+        });
+
+    }
+
+
+</script>
+<script>
+
+    var year;
+    getYear();
+
+
     d3.select("body").select("#bar").attr("width", 1000).attr("height", 1000);
     var file = "2012-Table1.csv";
     var button4 = d3.select("body").select("#totalWins");
     button4.on("click", function(){
-        file = d3.select("#years2").node().value;
-        file = file+"-Table1.csv";
+        file = year+"-Table1.csv";
 //        alert(file);
         read();
     });
@@ -560,6 +632,7 @@ legend.append('text')
                 if (winner == "draw" && d.Venue.length !== (0)) {
                 }
                 if (winner === d["Home Team"] && d.Venue.length !== (0)) {
+//                    map[winner]["Round"] = d["Round"];
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
                     map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
@@ -583,6 +656,8 @@ legend.append('text')
     function drawGraph(data){
             d3.select("svg")
                     .remove();
+        d3.select("table")
+                .remove();
             w = 800;
             h = 800;
             var path = d3.geo.path();
@@ -592,9 +667,18 @@ legend.append('text')
             });
             var teams = new Array();
             var points = new Array();
+        if(comparing.length<1) {
             for (var key in map) {
                 teams.push(map[key]);
             }
+        }else{
+            for (var key in map) {
+                if(teamPicked(map[key].name)){
+                    teams.push(map[key]);
+                }
+//                alert(map[key].name);
+            }
+        }
             var bars = svg.selectAll("rect")
                     .data(teams)
                     .enter()
@@ -783,6 +867,16 @@ legend.append('text')
         }
         //console.log(teams);
     }
+
+    function teamPicked(team){
+        for(var i =0; i<comparing.length;i++){
+            if(team===comparing[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     function TeamcolorPicker(team) {
         if (team === ("New South Wales Swifts")) {
             return "#2E2EFE";
