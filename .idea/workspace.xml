@@ -23,14 +23,14 @@
     <favorites_list name="netballD3" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.57908165">
+    <splitter split-orientation="horizontal" split-proportion="0.44982994">
       <split-first>
         <leaf>
           <file leaf-file-name="Index.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Index.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.33536586" vertical-offset="4875" max-vertical-offset="18480">
-                  <caret line="336" column="24" selection-start-line="336" selection-start-column="24" selection-end-line="336" selection-end-column="24" />
+                <state vertical-scroll-proportion="7.957317" vertical-offset="0" max-vertical-offset="18495">
+                  <caret line="261" column="18" selection-start-line="261" selection-start-column="18" selection-end-line="261" selection-end-column="18" />
                   <folding>
                     <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#a#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -57,8 +57,8 @@
           <file leaf-file-name="Index.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Index.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.46242774" vertical-offset="10200" max-vertical-offset="18480">
-                  <caret line="696" column="10" selection-start-line="696" selection-start-column="10" selection-end-line="696" selection-end-column="10" />
+                <state vertical-scroll-proportion="0.40462428" vertical-offset="10380" max-vertical-offset="18495">
+                  <caret line="706" column="40" selection-start-line="706" selection-start-column="40" selection-end-line="706" selection-end-column="40" />
                   <folding>
                     <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#img#0;n#a#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -445,8 +445,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33536586" vertical-offset="4875" max-vertical-offset="18480">
-          <caret line="336" column="24" selection-start-line="336" selection-start-column="24" selection-end-line="336" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.40462428" vertical-offset="10380" max-vertical-offset="18495">
+          <caret line="706" column="40" selection-start-line="706" selection-start-column="40" selection-end-line="706" selection-end-column="40" />
           <folding>
             <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#a#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />

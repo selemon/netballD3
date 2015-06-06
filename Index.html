@@ -208,7 +208,7 @@
    <li><a href='index.html'><span>Home</span></a></li>
    <li class='active has-sub' id="years2"><a href='#'><span id="y">Year</span></a>
       <ul>
-         <li id="allYears" class='has-sub'><a value="allYears"><span>All Years</span></a></li>
+         <li id="allYears" class='has-sub'><a href='#' value="allYears"><span>All Years</span></a></li>
         <li id="y2008" class='has-sub'><a href='#' value="2008"><span>2008</span></a></li>
         <li id="y2009" class='has-sub'><a href='#' value="2009"><span>2009</span></a></li>
         <li id="y2010" class='has-sub'><a href='#' value="2010"><span>2010</span></a></li>
@@ -662,8 +662,8 @@ legend.append('text')
             h = 800;
             var path = d3.geo.path();
             var svg = d3.select("body").select("#bar").append("svg").attr({
-                width: w,
-                height: h
+                width: w+200,
+                height: h+200
             });
             var teams = new Array();
             var points = new Array();
@@ -704,8 +704,9 @@ legend.append('text')
                     .attr("stroke", "white")
                     .transition()
                     .duration(1500)
-                    .attr("fill", "black")
-                    .attr("stroke", "black")
+                    .attr("fill", "white")
+                    .attr("stroke", "white")
+                    .attr("font-size", "14px")
                     .attr("x", 80)
                     .attr("y", function(d, i){return 30*i+30;})
                     .text(function(d, i){return d.name+" - "+d.numOfWins;});
