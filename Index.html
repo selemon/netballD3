@@ -248,7 +248,7 @@
    <li class='last'><a href='#'><span>          </span></a></li>
    <li id="display"><a href='#' onclick="chosen()"><span>Display</span></a></li>
    <li id="totalWins" href='#' onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
-   <li id="H2H"><a href='#' onclick="H2H()"><span>Head to Head</span></a></li>
+   <li id="H2H"><a href='bubble.html' onclick="H2H()"><span>Head to Head</span></a></li>
    <li id="ChampStats"><a href='#'><span>Champions Stats</span></a></li>
    <li id="showAllByes"><a href='#' onclick="showByes()"><span>Show Byes</span></a></li>
    <li id="showAllData"><a href='#' onclick="showData()"><span>Show All Data</span></a></li>
@@ -373,6 +373,19 @@ var showD = d3.select("body").select("#showAllData");
 showD.on("click", function(){
     showData();
 });
+
+//show all data
+var showH = d3.select("body").select("#H2H");
+showH.on("click", function(){
+    var selected = comparing;
+    sessionStorage.setItem('map', JSON.stringify(map));
+    if(selected.length<1){
+        selected = ["New South Wales Swifts", "Waikato Bay of Plenty Magic", "Southern Steel", "Central Pulse", "Northern Mystics", "Melbourne Vixens", "Queensland Firebirds", "Adelaide Thunderbirds", "Canterbury Tactix", "West Coast Fever"];
+    }
+    sessionStorage.setItem('selected', JSON.stringify(selected));
+});
+
+
 
 
 
@@ -542,37 +555,43 @@ legend.append('text')
         y2008.on("click", function(){
             year = 2008;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
         var y2009 = d3.select("body").select("#y2009");
         y2009.on("click", function(){
             year = 2009;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
         var y2010 = d3.select("body").select("#y2010");
         y2010.on("click", function(){
             year = 2010;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
         var y2011 = d3.select("body").select("#y2011");
         y2011.on("click", function(){
             year = 2011;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
         var y2012 = d3.select("body").select("#y2012");
         y2012.on("click", function(){
             year = 2012;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
         var y2013 = d3.select("body").select("#y2013");
         y2013.on("click", function(){
             year = 2013;
             document.getElementById("y").innerHTML = year;
-//            alert(year);
+            file = year+"-Table1.csv";
+            read();
         });
 
     }
@@ -589,9 +608,9 @@ legend.append('text')
     var file = "2012-Table1.csv";
     var button4 = d3.select("body").select("#totalWins");
     button4.on("click", function(){
-        file = year+"-Table1.csv";
+//        file = year+"-Table1.csv";
 //        alert(file);
-        read();
+        read2();
     });
 
     var h = 1000;
@@ -602,6 +621,8 @@ legend.append('text')
     var ds;
     var map = new Object();
 //    read();
+
+
     function read(){
         d3.csv(file, function(error, data) {
             map = new Object();
@@ -650,9 +671,63 @@ legend.append('text')
             });
             calculateTotalPointsPerSeason(ds);
             calculateTotalWinLoss();
+//            drawGraph(ds);
+        });
+    }
+
+    function read2(){
+        d3.csv(file, function(error, data) {
+            map = new Object();
+            initializeTeams();
+            ds = data;
+
+            if(file==="2008-Table1.csv"||file==="2009-Table1.csv"){
+                for (var i =0;i<ds.length;i++) {
+                    var temp = ds[i];
+                    if (temp["Date"].substring(0,5)==="BYES:") {
+                        ds.splice(i,1);
+                    }
+                    else {
+                        var first = temp["Score"].substring(0,2);
+                        var second = temp["Score"].substring(3,5);
+                        ds[i]["Score"] = first+" – "+second;
+                    }
+                }
+            }
+            ds.forEach(function (d) {
+                d["Score1"] = +d['Score'].split(' – ')[0]
+                d["Score2"] = +d['Score'].split(' – ')[1]
+                d["Round"] = +d.Round;
+                //if (d.Venue.length !== (0)) {
+                d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
+                var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
+                d["Outcome"] = winner;
+                if (winner == "draw" && d.Venue.length !== (0)) {
+                }
+                if (winner === d["Home Team"] && d.Venue.length !== (0)) {
+//                    map[winner]["Round"] = d["Round"];
+                    map[winner]["points"] += 2;
+                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
+                    d["Loss"] = d["Away Team"];
+                }
+                if (winner === d["Away Team"] && d.Venue.length !== (0)) {
+                    map[winner]["points"] += 2;
+                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
+                    d["Lost"] = d["Home Team"];
+                }
+                //console.log(d);
+                //}
+                //console.log(map);
+            });
+            calculateTotalPointsPerSeason(ds);
+            calculateTotalWinLoss();
             drawGraph(ds);
         });
     }
+
+
     function drawGraph(data){
             d3.select("svg")
                     .remove();
