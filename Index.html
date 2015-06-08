@@ -4,6 +4,7 @@
     <title>ANZ Netball Championship</title>
     <link rel="shortcut icon" type="image/x-icon" href="data/anzico.ico">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet"  href="styl.css">
     <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <meta charset="utf-8">
@@ -108,6 +109,9 @@
         .col-11 {width: 91.66%;}
         .col-12 {width: 100%;}
 
+        .arc path {
+            stroke: #fff;
+        }
 .chart rect {
   fill: steelblue;
 }
@@ -249,7 +253,7 @@
    <li id="display"><a href='#' onclick="chosen()"><span>Display</span></a></li>
    <li id="totalWins" href='#' onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
    <li id="H2H"><a href='bubble.html' onclick="H2H()"><span>Head to Head</span></a></li>
-   <li id="ChampStats"><a href='#'><span>Champions Stats</span></a></li>
+   <li id="teamStat"><a href='#'><span>Team Stats</span></a></li>
    <li id="showAllByes"><a href='#' onclick="showByes()"><span>Show Byes</span></a></li>
    <li id="showAllData"><a href='#' onclick="showData()"><span>Show All Data</span></a></li>
 </ul>
@@ -260,6 +264,11 @@
 
 <div class="chart"></div>
 <svg class="chart"></svg>
+<div id="tooltip" class="hidden">
+
+    <p><span id="value">100</span>
+    </p>
+</div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 var comparing = [];
@@ -385,7 +394,11 @@ showH.on("click", function(){
     sessionStorage.setItem('selected', JSON.stringify(selected));
 });
 
-
+//show all data
+var showTeamStat = d3.select("body").select("#teamStat");
+showTeamStat.on("click", function(){
+    drawPie();
+});
 
 
 
@@ -610,7 +623,8 @@ legend.append('text')
     button4.on("click", function(){
 //        file = year+"-Table1.csv";
 //        alert(file);
-        read2();
+        read();
+        drawGraph();
     });
 
     var h = 1000;
@@ -620,7 +634,6 @@ legend.append('text')
     var padding = 80;
     var ds;
     var map = new Object();
-//    read();
 
 
     function read(){
@@ -650,24 +663,32 @@ legend.append('text')
                 d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
                 var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
                 d["Outcome"] = winner;
+                var homeTeam = d["Home Team"];
+                var awayTeam = d["Away Team"];
+                var totalScoreH = d["Score1"];
+                var totalScoreA = d["Score2"];
+//                alert(totalScoreH+" home; away "+totalScoreA);
                 if (winner == "draw" && d.Venue.length !== (0)) {
                 }
                 if (winner === d["Home Team"] && d.Venue.length !== (0)) {
 //                    map[winner]["Round"] = d["Round"];
+                    map[winner]["TotalScore"] +=totalScoreH;
+                    map[winner]["TotalScoreAgainst"] +=totalScoreA;
+//                    alert(map[winner]["TotalScore"]);
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
                     map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
                     d["Loss"] = d["Away Team"];
                 }
                 if (winner === d["Away Team"] && d.Venue.length !== (0)) {
+                    map[winner]["TotalScore"] +=totalScoreA;
+                    map[winner]["TotalScoreAgainst"] +=totalScoreH;
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
                     map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
                     d["Lost"] = d["Home Team"];
                 }
-                //console.log(d);
-                //}
-                //console.log(map);
+
             });
             calculateTotalPointsPerSeason(ds);
             calculateTotalWinLoss();
@@ -675,60 +696,241 @@ legend.append('text')
         });
     }
 
-    function read2(){
-        d3.csv(file, function(error, data) {
-            map = new Object();
-            initializeTeams();
-            ds = data;
 
-            if(file==="2008-Table1.csv"||file==="2009-Table1.csv"){
-                for (var i =0;i<ds.length;i++) {
-                    var temp = ds[i];
-                    if (temp["Date"].substring(0,5)==="BYES:") {
-                        ds.splice(i,1);
-                    }
-                    else {
-                        var first = temp["Score"].substring(0,2);
-                        var second = temp["Score"].substring(3,5);
-                        ds[i]["Score"] = first+" – "+second;
-                    }
-                }
+    function drawLinegraph() {
+
+        var teams = new Array();
+        var points = new Array();
+
+        for (var key in map) {
+            if(teamPicked(map[key].name)){
+                teams.push(map[key]);
             }
-            ds.forEach(function (d) {
-                d["Score1"] = +d['Score'].split(' – ')[0]
-                d["Score2"] = +d['Score'].split(' – ')[1]
-                d["Round"] = +d.Round;
-                //if (d.Venue.length !== (0)) {
-                d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
-                var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
-                d["Outcome"] = winner;
-                if (winner == "draw" && d.Venue.length !== (0)) {
-                }
-                if (winner === d["Home Team"] && d.Venue.length !== (0)) {
-//                    map[winner]["Round"] = d["Round"];
-                    map[winner]["points"] += 2;
-                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
-                    map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
-                    d["Loss"] = d["Away Team"];
-                }
-                if (winner === d["Away Team"] && d.Venue.length !== (0)) {
-                    map[winner]["points"] += 2;
-                    map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
-                    map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
-                    d["Lost"] = d["Home Team"];
-                }
-                //console.log(d);
-                //}
-                //console.log(map);
-            });
-            calculateTotalPointsPerSeason(ds);
-            calculateTotalWinLoss();
-            drawGraph(ds);
+        }
+
+        for (var i = 0; i < teams.length; i++) {
+
+            for (var j = 0; j < teams[i]["numOfGamesToPoints"].length; j++) {
+                points.push(teams[i]["numOfGamesToPoints"][j]);
+            }
+        }
+        //console.log(teams[0]["numOfGamesToPoints"]);
+
+        var yScale = d3.scale.linear()
+                .domain([
+                    d3.min(points, function (d, i) {
+                        return 0;
+                    }),
+                    d3.max(points, function (d, i) {
+                        return d;
+                    })
+                ]).range([600, 100]);
+
+        var xScale = d3.scale.linear()
+                .domain([
+                    d3.min(points, function (d, i) {
+                        return 0;
+                    }),
+                    d3.max(points, function (d, i) {
+                        return 12+d;
+                    })
+                ]).range([100, 1000]);
+
+
+        var yAxisGen = d3.svg.axis().scale(yScale).orient("left").ticks(8);
+        var xAxisGen = d3.svg.axis().scale(xScale).orient("bottom").ticks(14);
+
+        var lineGraph = d3.svg.line()
+                .x(function (d, i) {
+                    // console.log(i);
+                    return xScale(i);
+                })
+                .y(function (d, i) {
+                    //console.log(d);
+                    return yScale(d);
+                })
+                .interpolate("linear");
+
+        var svg = d3.select("body").append("svg").attr({
+            width: w,
+            height: 700
         });
+        var dots = svg.selectAll("g.circle")
+                .data(teams)
+                .enter()
+                .append("g")
+                .attr("class", "circle");
+        var selection = dots.selectAll("circle")
+                .data(function (d) {
+                    return d["numOfGamesToPoints"];
+                })
+                .enter()
+                .append("circle")
+                .attr("cx", function (d, i) {
+
+                    return xScale(i);
+                })
+                .attr("cy", function (d) {
+                    return yScale(d);
+                })
+                .attr("r", 7)
+                .on("mouseover", function (d, i, j) {
+
+                    d3.select(this).classed("circle--hover", true);
+                    //Get this bar's x/y values, then augment for the tooltip
+                    var xPosition = parseFloat(d3.select(this).attr("cx"));
+                    var yPosition = parseFloat(d3.select(this).attr("cy"));
+                    console.log(yPosition);
+                    //Update the tooltip position and value
+                    d3.select("#tooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", (yPosition + 240)+ "px")
+                            .select("#value")
+                            .text(function(){
+                                var holder;
+                                if(selection[j].parentNode.__data__.numOfGamesToPoints[i]>selection[j].parentNode.__data__.numOfGamesToPoints[i-1]){
+                                    holder = selection[j].parentNode.__data__.name+" Won \n Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
+                                }else{
+                                    holder = selection[j].parentNode.__data__.name+" Lost \n Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
+
+                                }
+                                return holder;
+                            });
+
+                    //Show the tooltip
+                    d3.select("#tooltip").classed("hidden", false);
+                }).on("mouseout", function (d) {
+                    d3.select(this).classed("circle--hover", false);
+                    d3.select("#tooltip").classed("hidden", true);
+                });
+
+
+
+        var yAxis = svg.append("g").call(yAxisGen)
+                .attr("class", "axis")
+                .attr("transform", "translate(" + padding + ",0)");
+
+        var xAxis = svg.append("g").call(xAxisGen)
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + (700 - padding) + ")");
+
+
+        var viz = svg.selectAll('.line')
+                .data(teams)
+                .enter()
+                .append("path")
+                .attr({
+                    d: function (d) {
+                        return lineGraph(d["numOfGamesToPoints"])
+                    },
+
+                    "stroke": function (d, i) {
+                        return TeamcolorPicker(d.name);
+                    },
+                    "stroke-width": 2,
+                    "fill": "none"
+                }).on("mouseover", function (d, i, j) {
+
+                    d3.select(this).classed("line--hover", true);
+                    console.log();
+                }).on("mouseout", function () {
+                    d3.select(this).classed("line--hover", false);
+                });
+
+        svg.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", 500)
+                .attr("y", 650)
+                .text("	Number of Games Played");
+
+        svg.append("text")
+                .attr("class", "x label")
+                .attr("text-anchor", "end")
+                .attr("x", 60)
+                .attr("y", 400)
+                .text("Points");
+
+
     }
 
 
-    function drawGraph(data){
+
+    function drawPie(){
+
+        d3.selectAll("svg")
+                .remove();
+        d3.select("table")
+                .remove();
+
+        drawLinegraph();
+
+        var width = 960,
+                height = 500,
+                radius = Math.min(width, height) / 2;
+
+        var color = d3.scale.ordinal()
+                .range(["#04B404", "#DF01D7"]);
+
+        var arc = d3.svg.arc()
+                .outerRadius(radius - 10)
+                .innerRadius(0);
+
+        var pie = d3.layout.pie()
+                .sort(null)
+                .value(function(d) { return d.population; });
+
+        var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+//        d3.csv("data.csv", function(error, data) {
+
+//            data.forEach(function(d) {
+//                d.population = +d.population;
+//            });
+
+        var data = [{age:"win", population: map[comparing[0]].numOfWins},
+            {age:"lose", population: map[comparing[0]].numOfLosses}];
+
+        //first pie
+        var g = svg.selectAll(".arc")
+                    .data(pie(data))
+                    .enter().append("g")
+                    .attr("class", "arc");
+
+            g.append("path")
+                    .attr("d", arc)
+                    .style("fill", function(d) { return color(d.data.age); });
+
+            g.append("text")
+                    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+                    .attr("dy", ".35em")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "40px")
+                    .text(function(d) {
+                        var holder = d.data.age+": "+ d.data.population;
+                        return holder; });
+
+
+
+    }
+
+//    age,population
+//    <5,2704659
+//    5-13,4499890
+//    14-17,2159981
+//    18-24,3853788
+//    25-44,14106543
+//    45-64,8819342
+//    ≥65,612463
+
+
+
+
+    function drawGraph(){
             d3.select("svg")
                     .remove();
         d3.select("table")
@@ -786,20 +988,41 @@ legend.append('text')
                     .attr("y", function(d, i){return 30*i+30;})
                     .text(function(d, i){return d.name+" - "+d.numOfWins;});
             var rect = svg.selectAll("rect");
-            rect.on("mouseover", function(){
+            rect.on("mouseover", function(d){
                 rect.transition()
                         .duration(0)
                         .attr('opacity', 0.33);
                 d3.select(this).transition()
                         .duration(500)
                         .attr('opacity', 1);
+
+                var xPosition = parseFloat(d3.select(this).attr("x"));
+                var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+
+                //Update the tooltip position and value
+                d3.select("#tooltip")
+                        .style("left", xPosition + "px")
+                        .style("top", yPosition + "px")
+                        .select("#value")
+                        .text(d.name+" "+ d.numOfWins+" wins");
+
+                //Show the tooltip
+                d3.select("#tooltip").classed("hidden", false);
+
             }).on("mouseout", function(){
                 rect.transition()
                         .duration(0)
                         .attr('opacity', 1);
+                d3.select("#tooltip").classed("hidden", true);
             });
         }
-        function getMap(k) {
+
+
+
+
+
+
+    function getMap(k) {
         return map[k];
     }
     function calculateTotalPointsPerSeason(ds) {
@@ -858,7 +1081,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Adelaide Thunderbirds"] = {
             name: "Adelaide Thunderbirds",
@@ -867,7 +1092,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Queensland Firebirds"] = {
             name: "Queensland Firebirds",
@@ -876,7 +1103,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Melbourne Vixens"] = {
             name: "Melbourne Vixens",
@@ -885,7 +1114,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Northern Mystics"] = {
             name: "Northern Mystics",
@@ -894,7 +1125,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Central Pulse"] = {
             name: "Central Pulse",
@@ -903,7 +1136,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Southern Steel"] = {
             name: "Southern Steel",
@@ -912,7 +1147,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Waikato Bay of Plenty Magic"] = {
             name: "Waikato Bay of Plenty Magic",
@@ -921,7 +1158,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["West Coast Fever"] = {
             name: "West Coast Fever",
@@ -930,7 +1169,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         map["Canterbury Tactix"] = {
             name: "Canterbury Tactix",
@@ -939,7 +1180,9 @@ legend.append('text')
             numOfLosses: 0,
             points: 0,
             numOfGamesToPoints: [],
-            gamesPlayed: 0
+            gamesPlayed: 0,
+            TotalScore: 0,
+            TotalScoreAgainst: 0
         }
         //console.log(teams);
     }
