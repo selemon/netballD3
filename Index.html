@@ -11,6 +11,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
+
+        .chart .legend {
+            fill: black;
+            font: 14px sans-serif;
+            text-anchor: start;
+            font-size: 12px;
+        }
+
+        .chart text {
+            fill: white;
+            font: 10px sans-serif;
+            text-anchor: end;
+        }
+
+        .chart .label {
+            fill: black;
+            font: 14px sans-serif;
+            text-anchor: end;
+        }
+
+        .bar:hover {
+            fill: brown;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+
         body {
             font: 10px sans-serif;}
 
@@ -112,39 +144,7 @@
         .arc path {
             stroke: #fff;
         }
-.chart rect {
-  fill: steelblue;
-}
 
-.chart .legend {
-  fill: black;
-  font: 14px sans-serif;
-  text-anchor: start;
-  font-size: 12px;
-}
-
-.chart text {
-  fill: white;
-  font: 10px sans-serif;
-  text-anchor: end;
-}
-
-.chart .label {
-  fill: black;
-  font: 14px sans-serif;
-  text-anchor: end;
-}
-
-.bar:hover {
-  fill: brown;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
     </style>
 </head>
 <body>
@@ -251,7 +251,7 @@
    </li>
    <li class='last'><a href='#'><span>          </span></a></li>
    <li id="display"><a href='#' onclick="chosen()"><span>Display</span></a></li>
-   <li id="totalWins" href='#' onclick="drawGraph()"><a href='#' ><span>Total Wins</span></a></li>
+   <li id="totalWins" href='#'><a href='#' ><span>Total Wins</span></a></li>
    <li id="H2H"><a href='bubble.html' onclick="H2H()"><span>Head to Head</span></a></li>
    <li id="teamStat"><a href='#'><span>Team Stats</span></a></li>
    <li id="showAllByes"><a href='#' onclick="showByes()"><span>Show Byes</span></a></li>
@@ -262,11 +262,13 @@
 
 <!--//////////////////////////////////////////////////////////////////////////////////-->
 
-<div class="chart"></div>
-<svg class="chart"></svg>
+<!--<div class="chart"></div>-->
+<div id="b">
+    <!--<svg class="chart"></svg>-->
+</div>
 <div id="tooltip" class="hidden">
 
-    <p><span id="value">100</span>
+    <p><span id="value" style="width: 100%">100</span>
     </p>
 </div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -326,9 +328,9 @@ function makeDonutAway(){
 }
 /////////////////////// SHOW ALL BYES /////////////////////////////////////////////////////
 function showByes(){
-    d3.select("table")
+    d3.selectAll("svg")
             .remove();
-    d3.select("svg")
+    d3.select("table")
             .remove();
     d3.text("Byes.csv", function(data) {               
                 var parsedCSV = d3.csv.parseRows(data);
@@ -349,9 +351,9 @@ function showByes(){
 ////////////////////// SHOW ALL BYES ENDS ///////////////////////////////////////////////////
 ////////////////////// SHOW ALL DATA ////////////////////////////////////////////////////////
 function showData(){
-    d3.select("table")
+    d3.selectAll("svg")
             .remove();
-    d3.select("svg")
+    d3.select("table")
             .remove();
     d3.text("fullDataNoByes.csv", function(data) {               
                 var parsedCSV = d3.csv.parseRows(data);
@@ -400,6 +402,17 @@ showTeamStat.on("click", function(){
     drawPie();
 });
 
+//show grouped bar chart for all years or single bars
+var button4 = d3.select("body").select("#totalWins");
+button4.on("click", function(){
+    if(year === "allYears"){
+        drawGroupedBar();
+    }else {
+        drawGraph();
+    }
+
+});
+
 
 
 var k;
@@ -429,132 +442,7 @@ d3.csv(file, function(error, data) {
     }); 
 }
 ////////////////// HEAD TO HEAD ///////////////////////////////////////////////////////////
-function H2H(){
-var data = {
-  labels: [
-    'resilience', 'maintainability', 'accessibility',
-    'uptime', 'functionality', 'impact'
-  ],
-  series: [
-    {
-      label: '2012',
-      values: [4, 8, 15, 16, 23, 42]
-    },
-    {
-      label: '2013',
-      values: [12, 43, 22, 11, 73, 25]
-    },
-    {
-      label: '2014',
-      values: [31, 28, 14, 8, 15, 21]
-    },]
-};
 
-var chartWidth       = 300,
-    barHeight        = 20,
-    groupHeight      = barHeight * data.series.length,
-    gapBetweenGroups = 10,
-    spaceForLabels   = 150,
-    spaceForLegend   = 150;
-
-// Zip the series data together (first values, second values, etc.)
-var zippedData = [];
-for (var i=0; i<data.labels.length; i++) {
-  for (var j=0; j<data.series.length; j++) {
-    zippedData.push(data.series[j].values[i]);
-  }
-}
-
-// Color scale
-var color = d3.scale.category20();
-var chartHeight = barHeight * zippedData.length + gapBetweenGroups * data.labels.length;
-
-var x = d3.scale.linear()
-    .domain([0, d3.max(zippedData)])
-    .range([0, chartWidth]);
-
-var y = d3.scale.linear()
-    .range([chartHeight + gapBetweenGroups, 0]);
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .tickFormat('')
-    .tickSize(0)
-    .orient("left");
-
-// Specify the chart area and dimensions
-var chart = d3.select(".chart")
-    .attr("width", spaceForLabels + chartWidth + spaceForLegend)
-    .attr("height", chartHeight);
-
-// Create bars
-var bar = chart.selectAll("g")
-    .data(zippedData)
-    .enter().append("g")
-    .attr("transform", function(d, i) {
-      return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i/data.series.length))) + ")";
-    });
-
-// Create rectangles of the correct width
-bar.append("rect")
-    .attr("fill", function(d,i) { return color(i % data.series.length); })
-    .attr("class", "bar")
-    .attr("width", x)
-    .attr("height", barHeight - 1);
-
-// Add text label in bar
-bar.append("text")
-    .attr("x", function(d) { return x(d) - 3; })
-    .attr("y", barHeight / 2)
-    .attr("fill", "red")
-    .attr("dy", ".35em")
-    .text(function(d) { return d; });
-
-// Draw labels
-bar.append("text")
-    .attr("class", "label")
-    .attr("x", function(d) { return - 10; })
-    .attr("y", groupHeight / 2)
-    .attr("dy", ".35em")
-    .text(function(d,i) {
-      if (i % data.series.length === 0)
-        return data.labels[Math.floor(i/data.series.length)];
-      else
-        return ""});
-
-chart.append("g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(" + spaceForLabels + ", " + -gapBetweenGroups/2 + ")")
-      .call(yAxis);
-
-// Draw legend
-var legendRectSize = 18,
-    legendSpacing  = 4;
-
-var legend = chart.selectAll('.legend')
-    .data(data.series)
-    .enter()
-    .append('g')
-    .attr('transform', function (d, i) {
-        var height = legendRectSize + legendSpacing;
-        var offset = -gapBetweenGroups/2;
-        var horz = spaceForLabels + chartWidth + 40 - legendRectSize;
-        var vert = i * height - offset;
-        return 'translate(' + horz + ',' + vert + ')';
-    });
-
-legend.append('rect')
-    .attr('width', legendRectSize)
-    .attr('height', legendRectSize)
-    .style('fill', function (d, i) { return color(i); })
-    .style('stroke', function (d, i) { return color(i); });
-
-legend.append('text')
-    .attr('class', 'legend')
-    .attr('x', legendRectSize + legendSpacing)
-    .attr('y', legendRectSize - legendSpacing)
-    .text(function (d) { return d.label;});
-}
 
 //////////////////// HEAD TO HEAD ENDS ///////////////////////////////////////////////////
 </script>
@@ -564,6 +452,13 @@ legend.append('text')
 </div>
 <script>
     function getYear(){
+        var allYears = d3.select("body").select("#allYears");
+        allYears.on("click", function(){
+            year = "allYears";
+            document.getElementById("y").innerHTML = year;
+            file = "fullDataNoByes.csv";
+            read();
+        });
         var y2008 = d3.select("body").select("#y2008");
         y2008.on("click", function(){
             year = 2008;
@@ -619,13 +514,7 @@ legend.append('text')
 
     d3.select("body").select("#bar").attr("width", 1000).attr("height", 1000);
     var file = "2012-Table1.csv";
-    var button4 = d3.select("body").select("#totalWins");
-    button4.on("click", function(){
-//        file = year+"-Table1.csv";
-//        alert(file);
-        read();
-        drawGraph();
-    });
+
 
     var h = 1000;
     var w = 1000;
@@ -642,23 +531,26 @@ legend.append('text')
             initializeTeams();
             ds = data;
 
-            if(file==="2008-Table1.csv"||file==="2009-Table1.csv"){
-            for (var i =0;i<ds.length;i++) {
-                        var temp = ds[i];
-                        if (temp["Date"].substring(0,5)==="BYES:") {
-                            ds.splice(i,1);
-                        }
-                        else {
-                            var first = temp["Score"].substring(0,2);
-                            var second = temp["Score"].substring(3,5);
-                            ds[i]["Score"] = first+" – "+second;
-                        }
-                      }
-                }
+//            if(file==="2008-Table1.csv"||file==="2009-Table1.csv"){
+//            for (var i =0;i<ds.length;i++) {
+//                        var temp = ds[i];
+//                        if (temp["Date"].substring(0,5)==="BYES:") {
+//                            ds.splice(i,1);
+//                        }
+//                        else {
+//                            var first = temp["Score"].substring(0,2);
+//                            var second = temp["Score"].substring(3,5);
+//                            ds[i]["Score"] = first+" – "+second;
+//                        }
+//                      }
+//                }
+            var b = true;
             ds.forEach(function (d) {
                 d["Score1"] = +d['Score'].split(' – ')[0]
                 d["Score2"] = +d['Score'].split(' – ')[1]
                 d["Round"] = +d.Round;
+                d["Year"] = +d["Date"].substring(d["Date"].length-4, d["Date"].length);
+                if(b){b=false;alert(d["Year"]);}
                 //if (d.Venue.length !== (0)) {
                 d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
                 var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
@@ -672,19 +564,31 @@ legend.append('text')
                 }
                 if (winner === d["Home Team"] && d.Venue.length !== (0)) {
 //                    map[winner]["Round"] = d["Round"];
+                    map[winner]["Year"]["Y"+d["Year"]]++;
+//                    map[d["Away Team"]]["Year"]["Y"+d["Year"]]++;
                     map[winner]["TotalScore"] +=totalScoreH;
                     map[winner]["TotalScoreAgainst"] +=totalScoreA;
+                    map[d["Away Team"]]["TotalScore"] +=totalScoreA;
+                    map[d["Away Team"]]["TotalScoreAgainst"] +=totalScoreH;
 //                    alert(map[winner]["TotalScore"]);
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[winner]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"]});
+                    map[d["Away Team"]]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"]});
                     map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
                     d["Loss"] = d["Away Team"];
                 }
                 if (winner === d["Away Team"] && d.Venue.length !== (0)) {
+                    map[winner]["Year"]["Y"+d["Year"]]++;
+//                    map[d["Home Team"]]["Year"]["Y"+d["Year"]]++;
                     map[winner]["TotalScore"] +=totalScoreA;
                     map[winner]["TotalScoreAgainst"] +=totalScoreH;
+                    map[d["Home Team"]]["TotalScore"] +=totalScoreH;
+                    map[d["Home Team"]]["TotalScoreAgainst"] +=totalScoreA;
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
+                    map[winner]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"]});
+                    map[d["Home Team"]]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"]});
                     map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
                     d["Lost"] = d["Home Team"];
                 }
@@ -724,7 +628,7 @@ legend.append('text')
                     d3.max(points, function (d, i) {
                         return d;
                     })
-                ]).range([600, 100]);
+                ]).range([600, 200]);
 
         var xScale = d3.scale.linear()
                 .domain([
@@ -732,7 +636,7 @@ legend.append('text')
                         return 0;
                     }),
                     d3.max(points, function (d, i) {
-                        return 12+d;
+                        return d+10;
                     })
                 ]).range([100, 1000]);
 
@@ -787,13 +691,21 @@ legend.append('text')
                             .style("top", (yPosition + 240)+ "px")
                             .select("#value")
                             .text(function(){
+                                var score1 = map[selection[j].parentNode.__data__.name].Date[i].Score.split(' – ')[0];
+                                var score2 = map[selection[j].parentNode.__data__.name].Date[i].Score.split(' – ')[1];
                                 var holder;
-                                if(selection[j].parentNode.__data__.numOfGamesToPoints[i]>selection[j].parentNode.__data__.numOfGamesToPoints[i-1]){
-                                    holder = selection[j].parentNode.__data__.name+" Won \n Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
+                                if(score1>score2){
+                                    holder = "Round "+(i+1)+": "+selection[j].parentNode.__data__.name+" Won Vs "+map[selection[j].parentNode.__data__.name].Date[i].vs+"\n " +
+                                    "Score "+map[selection[j].parentNode.__data__.name].Date[i].Score+"\n"+
+                                    "Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
                                 }else{
-                                    holder = selection[j].parentNode.__data__.name+" Lost \n Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
+                                    holder = "Round "+(i+1)+": "+selection[j].parentNode.__data__.name+" Lost Vs "+map[selection[j].parentNode.__data__.name].Date[i].vs+"\n" +
+                                    "Score "+map[selection[j].parentNode.__data__.name].Date[i].Score+"\n"+
+                                    "Season Point "+selection[j].parentNode.__data__.numOfGamesToPoints[i];
 
                                 }
+//                                alert(map[selection[j].parentNode.__data__.name]);
+//                                alert(i);
                                 return holder;
                             });
 
@@ -931,7 +843,7 @@ legend.append('text')
 
 
     function drawGraph(){
-            d3.select("svg")
+            d3.selectAll("svg")
                     .remove();
         d3.select("table")
                 .remove();
@@ -939,8 +851,8 @@ legend.append('text')
             h = 800;
             var path = d3.geo.path();
             var svg = d3.select("body").select("#bar").append("svg").attr({
-                width: w+200,
-                height: h+200
+                width: w,
+                height: h-300
             });
             var teams = new Array();
             var points = new Array();
@@ -956,6 +868,9 @@ legend.append('text')
 //                alert(map[key].name);
             }
         }
+
+
+
             var bars = svg.selectAll("rect")
                     .data(teams)
                     .enter()
@@ -1018,7 +933,240 @@ legend.append('text')
         }
 
 
+    function get2008Data(data){
+        var temp = [];
+        data.forEach(function(d){
+                temp.push(d.Year.Y2008);
+        });
+        return temp;
+    }
+    function get2009Data(data){
+        var temp = [];
+        data.forEach(function(d){
 
+                temp.push(d.Year.Y2009);
+        });
+        return temp;
+    }
+    function get2010Data(data){
+        var temp = [];
+        data.forEach(function(d){
+
+                temp.push(d.Year.Y2010);
+
+        });
+        return temp;
+    }
+    function get2011Data(data){
+        var temp = [];
+        data.forEach(function(d){
+                temp.push(d.Year.Y2011);
+        });
+        return temp;
+    }
+    function get2012Data(data){
+        var temp = [];
+        data.forEach(function(d){
+                temp.push(d.Year.Y2012);
+        });
+        return temp;
+    }
+    function get2013Data(data){
+        var temp = [];
+        data.forEach(function(d){
+                temp.push(d.Year.Y2013);
+        });
+        return temp;
+    }
+
+    function drawGroupedBar(){
+
+        d3.selectAll("svg")
+                .remove();
+        d3.select("table")
+                .remove();
+
+        var teams = new Array();
+        var points = new Array();
+        var holder = new Array();
+        var y08 = new Array();
+        var y09 = new Array();
+        var y10 = new Array();
+        var y11 = new Array();
+        var y12 = new Array();
+        var y13 = new Array();
+
+
+
+        if(comparing.length<1) {
+            for (var key in map) {
+                teams.push(map[key].name);
+                holder.push(map[key]);
+            }
+        }else{
+            for (var key in map) {
+                if(teamPicked(map[key].name)){
+                    teams.push(map[key].name);
+                    holder.push(map[key]);
+                }
+//                alert(map[key].name);
+            }
+        }
+
+
+        //get 2008 data
+        y08 = get2008Data(holder);
+        //get 2008 data
+        y09 = get2009Data(holder);
+        //get 2008 data
+        y10 = get2010Data(holder);
+        //get 2008 data
+        y11 = get2011Data(holder);
+        //get 2008 data
+        y12 = get2012Data(holder);
+        //get 2008 data
+        y13 = get2013Data(holder);
+        alert(y09.length);
+
+
+        var data = {
+            labels: teams,
+            series: [
+                {
+                    label: '2008',
+                    values: y08
+                },
+                {
+                    label: '2009',
+                    values: y09
+                },
+                {
+                    label: '2010',
+                    values: y10
+                },
+                {
+                    label: '2011',
+                    values: y11
+                },
+                {
+                    label: '2012',
+                    values: y12
+                },
+                {
+                    label: '2013',
+                    values: y13
+                }]
+        };
+
+        var chartWidth       = 800,
+                barHeight        = 20,
+                groupHeight      = barHeight * data.series.length,
+                gapBetweenGroups = 10,
+                spaceForLabels   = 150,
+                spaceForLegend   = 150;
+
+// Zip the series data together (first values, second values, etc.)
+        var zippedData = [];
+        for (var i=0; i<data.labels.length; i++) {
+            for (var j=0; j<data.series.length; j++) {
+                zippedData.push(data.series[j].values[i]);
+            }
+        }
+
+// Color scale
+        var color = d3.scale.category20();
+        var chartHeight = barHeight * zippedData.length + gapBetweenGroups * data.labels.length;
+
+        var x = d3.scale.linear()
+                .domain([0, d3.max(zippedData)])
+                .range([0, chartWidth]);
+
+        var y = d3.scale.linear()
+                .range([chartHeight + gapBetweenGroups, 0]);
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .tickFormat('')
+                .tickSize(0)
+                .orient("left");
+
+// Specify the chart area and dimensions
+        var chart = d3.select("body").select("#b").append("svg")
+                .attr("classed", ".chart")
+                .attr("width", spaceForLabels + chartWidth + spaceForLegend)
+                .attr("height", chartHeight);
+
+// Create bars
+        var bar = chart.selectAll("g")
+                .data(zippedData)
+                .enter().append("g")
+                .attr("transform", function(d, i) {
+                    return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i/data.series.length))) + ")";
+                });
+
+// Create rectangles of the correct width
+        bar.append("rect")
+                .attr("fill", function(d,i) { return color(i % data.series.length); })
+                .attr("class", "bar")
+                .attr("width", x)
+                .attr("height", barHeight - 1);
+
+// Add text label in bar
+        bar.append("text")
+                .attr("x", function(d) { return x(d) - 3; })
+                .attr("y", barHeight / 2)
+                .attr("fill", "red")
+                .attr("dy", ".35em")
+                .text(function(d) { return d; });
+
+// Draw labels
+        bar.append("text")
+                .attr("class", "label")
+                .attr("x", function(d) { return - 10; })
+                .attr("y", groupHeight / 2)
+                .attr("dy", ".35em")
+                .text(function(d,i) {
+                    if (i % data.series.length === 0)
+                        return data.labels[Math.floor(i/data.series.length)];
+                    else
+                        return ""});
+
+        chart.append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate(" + spaceForLabels + ", " + -gapBetweenGroups/2 + ")")
+                .call(yAxis);
+
+// Draw legend
+        var legendRectSize = 18,
+                legendSpacing  = 4;
+
+        var legend = chart.selectAll('.legend')
+                .data(data.series)
+                .enter()
+                .append('g')
+                .attr('transform', function (d, i) {
+                    var height = legendRectSize + legendSpacing;
+                    var offset = -gapBetweenGroups/2;
+                    var horz = spaceForLabels + chartWidth + 40 - legendRectSize;
+                    var vert = i * height - offset;
+                    return 'translate(' + horz + ',' + vert + ')';
+                });
+
+        legend.append('rect')
+                .attr("class", "bar")
+                .attr('width', legendRectSize)
+                .attr('height', legendRectSize)
+                .style('fill', function (d, i) { return color(i); })
+                .style('stroke', function (d, i) { return color(i); });
+
+        legend.append('text')
+                .attr('class', 'legend')
+                .attr('x', legendRectSize + legendSpacing)
+                .attr('y', legendRectSize - legendSpacing)
+                .text(function (d) { return d.label; });
+
+
+    }
 
 
 
@@ -1083,7 +1231,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Adelaide Thunderbirds"] = {
             name: "Adelaide Thunderbirds",
@@ -1094,7 +1244,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Queensland Firebirds"] = {
             name: "Queensland Firebirds",
@@ -1105,7 +1257,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Melbourne Vixens"] = {
             name: "Melbourne Vixens",
@@ -1116,7 +1270,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Northern Mystics"] = {
             name: "Northern Mystics",
@@ -1127,7 +1283,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Central Pulse"] = {
             name: "Central Pulse",
@@ -1138,7 +1296,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Southern Steel"] = {
             name: "Southern Steel",
@@ -1149,7 +1309,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Waikato Bay of Plenty Magic"] = {
             name: "Waikato Bay of Plenty Magic",
@@ -1160,7 +1322,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["West Coast Fever"] = {
             name: "West Coast Fever",
@@ -1171,7 +1335,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         map["Canterbury Tactix"] = {
             name: "Canterbury Tactix",
@@ -1182,7 +1348,9 @@ legend.append('text')
             numOfGamesToPoints: [],
             gamesPlayed: 0,
             TotalScore: 0,
-            TotalScoreAgainst: 0
+            TotalScoreAgainst: 0,
+            Date: [],
+            Year:{"Y2008":0, "Y2009":0, "Y2010":0,"Y2011":0,"Y2012":0,"Y2013":0}
         }
         //console.log(teams);
     }

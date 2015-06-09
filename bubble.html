@@ -34,13 +34,26 @@
 </head>
 <body style="background: #000000">
 <span style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="Index.html"> X </a></span>
+<span id="scored" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Total Scored </a></span>
+<span id="point" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Points </a></span>
+
+
 <div class="bubbleChart"/>
 
 <script>
     
     var selected = JSON.parse(sessionStorage.getItem("selected"));
     var map = JSON.parse(sessionStorage.getItem("map"));
-
+    var point = d3.select("body").select("#point")
+            .on("click", function(){
+                setUp("point");
+                drawBubble();
+            });
+    var score = d3.select("body").select("#scored")
+            .on("click", function(){
+                setUp("scored");
+                drawBubble();
+            });
 
     var teams = new Array();
     var points = new Array();
@@ -53,19 +66,39 @@
     }
 
 
+
     var item = [];
-    teams.forEach(function(d){
-        item.push({text: d.name,
-            count: d.points,
-        loss: d.numOfLosses,
-        wins: d.numOfWins});
-    });
+    function setUp(d) {
+        if(d==="point") {
+            item = [];
+            teams.forEach(function (d) {
+                item.push({
+                    text: d.name,
+                    count: d.points,
+                    loss: d.numOfLosses,
+                    wins: d.numOfWins
+                });
+            });
+        }else{
+            item = [];
+            teams.forEach(function (d) {
+                item.push({
+                    text: d.name,
+                    count: d.Total,
+                    loss: d.numOfLosses,
+                    wins: d.numOfWins
+                });
+            });
+        }
+    }
 
 
 
-
+    setUp("point");
     drawBubble();
     function drawBubble(){
+        d3.selectAll("svg")
+                .remove();
         var bubbleChart = new d3.svg.BubbleChart({
             supportResponsive: true,
             //container: => use @default
