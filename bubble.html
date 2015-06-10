@@ -33,10 +33,19 @@
     </style>
 </head>
 <body style="background: #000000">
-<span style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="Index.html"> X </a></span>
-<span id="scored" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Total Scored </a></span>
-<span id="point" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Points </a></span>
-
+<span style="display: inline-block; font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="Index.html"> X </a></span>
+<!--<span id="scored" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Total Scored </a></span>-->
+<!--<span id="point" style="font-size: 25px; font-family: Verdana; color: #0fa1e0"><a href="#"> Points </a></span>-->
+<button id="search" style="display: inline-block; float: right">Compare</button>
+<span style="color: #0fa1e0; display: inline-block; float: right">Select
+    <select id="season" style="display: inline-block; float: right">
+        <option id="wins" value="wins">Wins Comparison</option>
+        <option id="loss" value="loss">Loss Comparison</option>
+        <option id="point" value="point">Point Comparison</option>
+        <option id="scored" value="scored">Total Scored</option>
+        <option id="scoredA" value="scoredA">Total Opp. Score</option>
+    </select>
+</span>
 
 <div class="bubbleChart"/>
 
@@ -44,15 +53,31 @@
     
     var selected = JSON.parse(sessionStorage.getItem("selected"));
     var map = JSON.parse(sessionStorage.getItem("map"));
-    var point = d3.select("body").select("#point")
+
+    var file;
+
+
+    var point = d3.select("body").select("#search")
             .on("click", function(){
-                setUp("point");
-                drawBubble();
-            });
-    var score = d3.select("body").select("#scored")
-            .on("click", function(){
-                setUp("scored");
-                drawBubble();
+                file = d3.select("#season").node().value;
+                if(file==="point"){
+                    setUp("point");
+                    drawBubble();
+                }else if(file==="scored"){
+                    setUp("scored");
+                    drawBubble();
+                }else if(file==="scoredA"){
+                    setUp("scoredA");
+                    drawBubble();
+                }else if(file==="wins"){
+                    setUp("wins");
+                    drawBubble();
+                }else if(file==="loss"){
+                    setUp("loss");
+                    drawBubble();
+                }
+
+
             });
 
     var teams = new Array();
@@ -79,7 +104,7 @@
                     wins: d.numOfWins
                 });
             });
-        }else{
+        }else if(d==="scored"){
             item = [];
             teams.forEach(function (d) {
                 item.push({
@@ -89,12 +114,42 @@
                     wins: d.numOfWins
                 });
             });
+        }else if(d==="scoredA"){
+            item = [];
+            teams.forEach(function (d) {
+                item.push({
+                    text: d.name,
+                    count: d.TotalScoreAgainst,
+                    loss: d.numOfLosses,
+                    wins: d.numOfWins
+                });
+            });
+        }else if(d==="wins"){
+            item = [];
+            teams.forEach(function (d) {
+                item.push({
+                    text: d.name,
+                    count: d.numOfWins,
+                    loss: d.numOfLosses,
+                    wins: d.numOfWins
+                });
+            });
+        }else if(d==="loss"){
+            item = [];
+            teams.forEach(function (d) {
+                item.push({
+                    text: d.name,
+                    count: d.numOfLosses,
+                    loss: d.numOfLosses,
+                    wins: d.numOfWins
+                });
+            });
         }
     }
 
 
 
-    setUp("point");
+    setUp("wins");
     drawBubble();
     function drawBubble(){
         d3.selectAll("svg")
@@ -102,9 +157,9 @@
         var bubbleChart = new d3.svg.BubbleChart({
             supportResponsive: true,
             //container: => use @default
-            size: 600,
+            size: 500,
             //viewBoxSize: => use @default
-            innerRadius: 600 / 3.5,
+            innerRadius: 500 / 3.5,
             //outerRadius: => use @default
             radiusMin: 50,
             //radiusMax: use @default

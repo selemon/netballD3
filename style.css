@@ -1,3 +1,4 @@
+
 body {
     font: 10px sans-serif;}
 
@@ -35,11 +36,13 @@ body {
     padding: 5px;
     text-align: center;}
 
-.bar {
-    fill: #1b8053;}
+/*.bar {*/
+/*fill: #1b8053;}*/
 
 .text{
-    fill: black;}
+    fill: white;
+    font: 14px sans-serif;
+}
 
 .axis {
     font: 10px sans-serif;
@@ -96,35 +99,6 @@ td {
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
-.chart rect {
-    fill: steelblue;
-}
-.chart .legend {
-    fill: black;
-    font: 14px sans-serif;
-    text-anchor: start;
-    font-size: 12px;
-}
-
-.chart text {
-    fill: white;
-    font: 10px sans-serif;
-    text-anchor: end;
-}
-
-.chart .label {
-    fill: black;
-    font: 14px sans-serif;
-    text-anchor: end;
-}
-
-.bar:hover {
-    fill: brown;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+.arc path {
+    stroke: #fff;
 }

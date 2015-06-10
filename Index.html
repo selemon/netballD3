@@ -4,148 +4,15 @@
     <title>ANZ Netball Championship</title>
     <link rel="shortcut icon" type="image/x-icon" href="data/anzico.ico">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"  href="styl.css">
+    <link rel="stylesheet" href="groupedBar.css">
     <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
 
-        .chart .legend {
-            fill: black;
-            font: 14px sans-serif;
-            text-anchor: start;
-            font-size: 12px;
-        }
-
-        .chart text {
-            fill: white;
-            font: 10px sans-serif;
-            text-anchor: end;
-        }
-
-        .chart .label {
-            fill: black;
-            font: 14px sans-serif;
-            text-anchor: end;
-        }
-
-        .bar:hover {
-            fill: brown;
-        }
-
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-
-
-        body {
-            font: 10px sans-serif;}
-
-        #title {
-            text-align: center;
-            text-align: center;
-            color: white;
-            text-shadow: 2px 2px black;
-            border-color: #FFFAF0;
-            background-color: #2E9AFE;}
-
-        #teams{
-            text-align: center;
-            background-color: #58ACFA;}
-
-        #ANZ {
-            text-align: center;}
-        
-        #rounds {
-            text-align: left;
-            color: blue; }
-
-        #years {
-            text-align: left;
-            color: blue;}
-
-        #table {
-        border-collapse: collapse;
-        border: 2px black solid;
-        font: 12px sans-serif;
-        text-align: center;}
-
-        #td {
-        border: 1px black solid;
-        padding: 5px;
-        text-align: center;}
-
-        .bar {
-            fill: #1b8053;}
-
-        .text{
-            fill: black;}
-
-        .axis {
-            font: 10px sans-serif;
-            fill: white;}
-
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;}
-
-        .arc path {
-            stroke: #fff;}
-
-        .x.axis path {
-            display: none;}
-
-        table {
-            border-collapse: collapse;
-            border: 2px black solid;
-            font: 12px sans-serif;}
-
-        td {
-            border: 1px black solid;
-            padding: 5px;}
-
-        *{box-sizing: border-box;}
-
-        .header {
-            background-color: #000000;
-            padding: 15px;}
-
-        .row:after {
-            content: "";
-            clear: both;
-            background-color: #333333;
-            display: block;}
-
-        [class*="col-"] {
-            float: left;
-            padding: 15px;
-            background-color: #333333;}
-
-        .col-1 {width: 8.33%;}
-        .col-2 {width: 16.66%;}
-        .col-3 {width: 25%;}
-        .col-4 {width: 33.33%;}
-        .col-5 {width: 41.66%;}
-        .col-6 {width: 50%;}
-        .col-7 {width: 58.33%;}
-        .col-8 {width: 66.66%;}
-        .col-9 {width: 75%;}
-        .col-10 {width: 83.33%;}
-        .col-11 {width: 91.66%;}
-        .col-12 {width: 100%;}
-
-        .arc path {
-            stroke: #fff;
-        }
-
-    </style>
 </head>
 <body>
 <div class="row"> 
@@ -263,9 +130,7 @@
 <!--//////////////////////////////////////////////////////////////////////////////////-->
 
 <!--<div class="chart"></div>-->
-<div id="b">
-    <!--<svg class="chart"></svg>-->
-</div>
+
 <div id="tooltip" class="hidden">
 
     <p><span id="value" style="width: 100%">100</span>
@@ -277,55 +142,7 @@ var comparing = [];
 function clear(elementID){
 document.getElementById(elementID).innerHTML="";
 }
-function refreshGraph(){
-    currentYear = getYearForm();
-    currentRound = getRoundForm();
-    d3.select("svg").remove();
-    manipulateData();
-}
-//get all aus teams
-function getAllAusDown(){
-    mouseOverFeverMDown();
-    mouseOverThunderMDown();
-    mouseOverFirebirdsMDown();
-    mouseOverVixensMDown();
-    mouseOverSwiftsMDown();
-}
-function getAllAusUp(){
-    mouseOverFeverMUp();
-    mouseOverThunderMUp();
-    mouseOverFirebirdsMUp();
-    mouseOverVixensMUp();
-    mouseOverSwiftsMUp();
-}
-//get all NZ teams
-function getAllNzDown(){
-    mouseOverMagicMDown();
-    mouseOverSteelMDown();
-    mouseOverPulseMDown();
-    mouseOverTactixMDown();
-    mouseOverMysticsMDown();
-}
-function getAllNzUp(){
-    mouseOverMagicMUp();
-    mouseOverSteelMUp();
-    mouseOverPulseMUp();
-    mouseOverTactixMUp();
-    mouseOverMysticsMUp();
-}
 
-function makeDonutHome(){
-    currentYear = getYearForm();
-    currentRound = getRoundForm();
-    d3.select("svg").remove();
-    manipulateDataDonut(true);
-}
-function makeDonutAway(){
-    currentYear = getYearForm();
-    currentRound = getRoundForm();
-    d3.select("svg").remove();
-    manipulateDataDonut(false);
-}
 /////////////////////// SHOW ALL BYES /////////////////////////////////////////////////////
 function showByes(){
     d3.selectAll("svg")
@@ -403,8 +220,8 @@ showTeamStat.on("click", function(){
 });
 
 //show grouped bar chart for all years or single bars
-var button4 = d3.select("body").select("#totalWins");
-button4.on("click", function(){
+var showTotaWins = d3.select("body").select("#totalWins");
+showTotaWins.on("click", function(){
     if(year === "allYears"){
         drawGroupedBar();
     }else {
@@ -417,30 +234,7 @@ button4.on("click", function(){
 
 var k;
 var m;
-function chosen(){
-    file = d3.select("body").select("#years2").node().value;
-    file = file+"-Table1.csv";
-    round = d3.select("body").select("#rounds2").node().value;
-d3.csv(file, function(error, data) { 
-    m = data;
-    m.forEach(function(d){
-        if(d["Round"]===round){
-            k.push(d);
-        }
-    
-        var parsedCSV = d3.csv.parseRows(k);
-        var container = d3.select("body")
-        .append("table")
-        .selectAll("tr")
-        .data(parsedCSV).enter()
-        .append("tr")
-        .selectAll("td")
-        .data(function(d) { return d; }).enter()
-        .append("td")
-        .text(function(d) { return d; });
-    });
-    }); 
-}
+
 ////////////////// HEAD TO HEAD ///////////////////////////////////////////////////////////
 
 
@@ -550,7 +344,7 @@ d3.csv(file, function(error, data) {
                 d["Score2"] = +d['Score'].split(' – ')[1]
                 d["Round"] = +d.Round;
                 d["Year"] = +d["Date"].substring(d["Date"].length-4, d["Date"].length);
-                if(b){b=false;alert(d["Year"]);}
+//                if(b){b=false;alert(d["Year"]);}
                 //if (d.Venue.length !== (0)) {
                 d["ScoreDiff"] = +Math.abs(d.Score1 - d.Score2);
                 var winner = findWinner(d["Home Team"], d["Score1"], d["Away Team"], d["Score2"]);
@@ -750,14 +544,14 @@ d3.csv(file, function(error, data) {
                 });
 
         svg.append("text")
-                .attr("class", "x label")
+                .attr("class", "text")
                 .attr("text-anchor", "end")
                 .attr("x", 500)
-                .attr("y", 650)
+                .attr("y", 660)
                 .text("	Number of Games Played");
 
         svg.append("text")
-                .attr("class", "x label")
+                .attr("class", "text")
                 .attr("text-anchor", "end")
                 .attr("x", 60)
                 .attr("y", 400)
@@ -813,6 +607,7 @@ d3.csv(file, function(error, data) {
                     .enter().append("g")
                     .attr("class", "arc");
 
+
             g.append("path")
                     .attr("d", arc)
                     .style("fill", function(d) { return color(d.data.age); });
@@ -827,33 +622,23 @@ d3.csv(file, function(error, data) {
                         return holder; });
 
 
-
     }
-
-//    age,population
-//    <5,2704659
-//    5-13,4499890
-//    14-17,2159981
-//    18-24,3853788
-//    25-44,14106543
-//    45-64,8819342
-//    ≥65,612463
 
 
 
 
     function drawGraph(){
-            d3.selectAll("svg")
-                    .remove();
+        d3.selectAll("svg")
+                .remove();
         d3.select("table")
                 .remove();
             w = 800;
             h = 800;
             var path = d3.geo.path();
             var svg = d3.select("body").select("#bar").append("svg").attr({
-                width: w,
+                width: w+200,
                 height: h-300
-            });
+            }).attr("class", "other");
             var teams = new Array();
             var points = new Array();
         if(comparing.length<1) {
@@ -1026,7 +811,7 @@ d3.csv(file, function(error, data) {
         y12 = get2012Data(holder);
         //get 2008 data
         y13 = get2013Data(holder);
-        alert(y09.length);
+//        alert(y09.length);
 
 
         var data = {
@@ -1058,11 +843,11 @@ d3.csv(file, function(error, data) {
                 }]
         };
 
-        var chartWidth       = 800,
+        var chartWidth       = 600,
                 barHeight        = 20,
                 groupHeight      = barHeight * data.series.length,
-                gapBetweenGroups = 10,
-                spaceForLabels   = 150,
+                gapBetweenGroups = 15,
+                spaceForLabels   = 250,
                 spaceForLegend   = 150;
 
 // Zip the series data together (first values, second values, etc.)
@@ -1092,7 +877,7 @@ d3.csv(file, function(error, data) {
 
 // Specify the chart area and dimensions
         var chart = d3.select("body").select("#b").append("svg")
-                .attr("classed", ".chart")
+                .attr("class", "chart")
                 .attr("width", spaceForLabels + chartWidth + spaceForLegend)
                 .attr("height", chartHeight);
 
@@ -1106,6 +891,8 @@ d3.csv(file, function(error, data) {
 
 // Create rectangles of the correct width
         bar.append("rect")
+                .transition()
+                .duration(500)
                 .attr("fill", function(d,i) { return color(i % data.series.length); })
                 .attr("class", "bar")
                 .attr("width", x)
@@ -1707,6 +1494,8 @@ d3.select("body").style("background-color", "#58ACFA");
 
 
 <!-- TOTAL WINS GRAPH ENDS //////////////////////////////////////////////////////////// -->
-
+<div id="b">
+    <svg class="chart"></svg>
+</div>
 </body>
 </html>
