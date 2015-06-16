@@ -117,7 +117,7 @@
    </li>
    </li>
    <li class='last'><a href='#'><span>          </span></a></li>
-   <li id="display"><a href='#' onclick="chosen()"><span>Display</span></a></li>
+   <li id="filterData"><a href='#'><span>Filter Data</span></a></li>
    <li id="totalWins" href='#'><a href='#' ><span>Total Wins</span></a></li>
    <li id="H2H"><a href='bubble.html' onclick="H2H()"><span>Head to Head</span></a></li>
    <li id="teamStat"><a href='#'><span>Team Stats</span></a></li>
@@ -136,15 +136,65 @@
     <p><span id="value" style="width: 100%">100</span>
     </p>
 </div>
+<div id="filter">
+
+    <p class="text" style="color: whitesmoke">Home Away filter
+        <select id="homeAwayFilter">
+            <option value="Select">Select</option>
+            <option value="Home">Home</option>
+            <option value="Away">Away</option>
+        </select>
+
+    </p>
+    <p class="text" style="color: whitesmoke">Venue filter
+        <select id="venueFilter">
+            <option value="Select">Select</option>
+            <option value="Adelaide Arena, Adelaide">Adelaide Arena, Adelaide</option>
+            <option value="Arena Manawatu, Palmerston North">Arena Manawatu, Palmerston North</option>
+            <option value="Brisbane Convention and Exhibition Centre">Brisbane Convention and Exhibition Centre</option>
+            <option value="Challenge Stadium, Perth">Challenge Stadium, Perth</option>
+            <option value="ETSA Park, Adelaide">ETSA Park, Adelaide</option>
+            <option value="Energy Events Centre, Rotorua">Energy Events Centre, Rotorua</option>
+            <option value="Hisense Arena, Melbourne">Hisense Arena, Melbourne</option>
+            <option value="Mystery Creek Events Centre, Hamilton">Mystery Creek Events Centre, Hamilton</option>
+            <option value="North Shore Events Centre, Auckland">North Shore Events Centre, Auckland</option>
+            <option value="Queen Elizabeth Youth Centre, Tauranga">Queen Elizabeth Youth Centre, Tauranga</option>
+            <option value="Stadium Southland, Invercargil">Stadium Southland, Invercargil</option>
+            <option value="State Netball and Hockey Centre, Melbourne">State Netball and Hockey Centre, Melbourne</option>
+            <option value="Sydney Olympic Park Sports Centre">Sydney Olympic Park Sports Centre</option>
+            <option value="TSB Bank Arena, Wellington">TSB Bank Arena, Wellington"</option>
+            <option value="Te Rauparaha Arena, Porirua">Te Rauparaha Arena, Porirua</option>
+            <option value="The Edgar Centre, Dunedin">The Edgar Centre, Dunedin</option>
+            <option value="Trusts Stadium, Auckland">Trusts Stadium, Auckland</option>
+            <option value="Westpac Arena, Christchurch">Westpac Arena, Christchurch</option>
+        </select>
+
+    </p>
+
+    <p class="text" style="color: whitesmoke">winLossFilter
+        <select id="winLossFilter">
+            <option value="Select">Select</option>
+            <option value="Win">Win</option>
+            <option value="Loss">Loss</option>
+        </select>
+        <br>
+        <br>
+        <button id="search">Search</button>
+    </p>
+
+
+</div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 var comparing = [];
+document.getElementById("filter").style.display = "none";
 function clear(elementID){
 document.getElementById(elementID).innerHTML="";
 }
 
 /////////////////////// SHOW ALL BYES /////////////////////////////////////////////////////
 function showByes(){
+    document.getElementById("filter").style.display = "none";
     d3.selectAll("svg")
             .remove();
     d3.select("table")
@@ -168,6 +218,7 @@ function showByes(){
 ////////////////////// SHOW ALL BYES ENDS ///////////////////////////////////////////////////
 ////////////////////// SHOW ALL DATA ////////////////////////////////////////////////////////
 function showData(){
+    document.getElementById("filter").style.display = "none";
     d3.selectAll("svg")
             .remove();
     d3.select("table")
@@ -205,27 +256,72 @@ showD.on("click", function(){
 //show all data
 var showH = d3.select("body").select("#H2H");
 showH.on("click", function(){
-    var selected = comparing;
-    sessionStorage.setItem('map', JSON.stringify(map));
-    if(selected.length<1){
-        selected = ["New South Wales Swifts", "Waikato Bay of Plenty Magic", "Southern Steel", "Central Pulse", "Northern Mystics", "Melbourne Vixens", "Queensland Firebirds", "Adelaide Thunderbirds", "Canterbury Tactix", "West Coast Fever"];
+    if(year===undefined){
+        alert("Please Select A Year");
+    }else {
+        var selected = comparing;
+        sessionStorage.setItem('map', JSON.stringify(map));
+        if (selected.length < 1) {
+            selected = ["New South Wales Swifts", "Waikato Bay of Plenty Magic", "Southern Steel", "Central Pulse", "Northern Mystics", "Melbourne Vixens", "Queensland Firebirds", "Adelaide Thunderbirds", "Canterbury Tactix", "West Coast Fever"];
+        }
+        sessionStorage.setItem('selected', JSON.stringify(selected));
     }
-    sessionStorage.setItem('selected', JSON.stringify(selected));
 });
 
 //show all data
 var showTeamStat = d3.select("body").select("#teamStat");
 showTeamStat.on("click", function(){
-    drawPie();
+    if(comparing.length<1||year === undefined){
+        alert("Please select a team And Year");
+    }else{
+        document.getElementById("filter").style.display = "none";
+        drawPie();
+    }
 });
 
 //show grouped bar chart for all years or single bars
 var showTotaWins = d3.select("body").select("#totalWins");
 showTotaWins.on("click", function(){
-    if(year === "allYears"){
-        drawGroupedBar();
+    if(year===undefined){
+        alert("Please Select A Year");
     }else {
-        drawGraph();
+        document.getElementById("filter").style.display = "none";
+        if (year === "allYears") {
+            drawGroupedBar();
+        } else {
+            drawGraph();
+        }
+    }
+
+});
+//show grouped bar chart for all years or single bars
+var filterData = d3.select("body").select("#filterData");
+filterData.on("click", function(){
+    if(year===undefined){
+        alert("Please Select A Year");
+    }else {
+        d3.selectAll("svg")
+                .remove();
+        d3.selectAll("table")
+                .remove();
+        document.getElementById("filter").style.display = "block";
+//        filterGames();
+    }
+
+});
+//show grouped bar chart for all years or single bars
+var showFilter = d3.select("body").select("#search");
+showFilter.on("click", function(){
+    if(!comparing.length<1) {
+        if (year === "allYears") {
+            wd = 4500;
+        } else {
+            wd = 1000;
+        }
+//        document.getElementById("filter").style.display = "block";
+        filterGames();
+    }else{
+        alert("Please select A Team");
     }
 
 });
@@ -357,7 +453,7 @@ var m;
                 if (winner == "draw" && d.Venue.length !== (0)) {
                 }
                 if (winner === d["Home Team"] && d.Venue.length !== (0)) {
-//                    map[winner]["Round"] = d["Round"];
+//                    map[winner]["Venue"] = d["Venue"];
                     map[winner]["Year"]["Y"+d["Year"]]++;
 //                    map[d["Away Team"]]["Year"]["Y"+d["Year"]]++;
                     map[winner]["TotalScore"] +=totalScoreH;
@@ -367,12 +463,13 @@ var m;
 //                    alert(map[winner]["TotalScore"]);
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
-                    map[winner]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"]});
-                    map[d["Away Team"]]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"]});
+                    map[winner]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"], "Venue":d["Venue"], "Outcome":"Won"});
+                    map[d["Away Team"]]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"], "Venue":d["Venue"], "Outcome":"Lost"});
                     map[d["Away Team"]]["numOfGamesToPoints"].push(map[d["Away Team"]]["points"]);
                     d["Loss"] = d["Away Team"];
                 }
                 if (winner === d["Away Team"] && d.Venue.length !== (0)) {
+//                    map[winner]["Venue"] = d["Venue"];
                     map[winner]["Year"]["Y"+d["Year"]]++;
 //                    map[d["Home Team"]]["Year"]["Y"+d["Year"]]++;
                     map[winner]["TotalScore"] +=totalScoreA;
@@ -381,8 +478,8 @@ var m;
                     map[d["Home Team"]]["TotalScoreAgainst"] +=totalScoreA;
                     map[winner]["points"] += 2;
                     map[winner]["numOfGamesToPoints"].push(map[winner]["points"]);
-                    map[winner]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"]});
-                    map[d["Home Team"]]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"]});
+                    map[winner]["Date"].push({"Score":d["Score2"]+" – "+d["Score1"], "vs":d["Home Team"], "Venue":d["Venue"], "Outcome":"Won"});
+                    map[d["Home Team"]]["Date"].push({"Score":d["Score1"]+" – "+d["Score2"], "vs":d["Away Team"], "Venue":d["Venue"], "Outcome":"Lost"});
                     map[d["Home Team"]]["numOfGamesToPoints"].push(map[d["Home Team"]]["points"]);
                     d["Lost"] = d["Home Team"];
                 }
@@ -630,7 +727,7 @@ var m;
     function drawGraph(){
         d3.selectAll("svg")
                 .remove();
-        d3.select("table")
+        d3.selectAll("table")
                 .remove();
             w = 800;
             h = 800;
@@ -718,6 +815,165 @@ var m;
         }
 
 
+
+    var filters = new Object();
+
+    function filterGames() {
+        console.log("here");
+
+
+
+
+//        d3.select("#search").on("click", function () {
+
+//            var file = d3.select("#season").node().value;
+//            console.log(file);
+//            data((file+".csv"));
+
+//            var teamNameFilter = d3.select("#teamNameFilter").node().value;
+            var homeAwayFilter = d3.select("#homeAwayFilter").node().value;
+            var venueFilter = d3.select("#venueFilter").node().value;
+            var winLossFilter = d3.select("#winLossFilter").node().value;
+
+            if(comparing.length<1){
+                filters["teamNameFilter"] = "Select";
+            }else{
+                filters["teamNameFilter"] = comparing[0];
+            }
+            filters["homeAwayFilter"] = homeAwayFilter;
+            filters["venueFilter"] = venueFilter;
+            filters["winLossFilter"] = winLossFilter;
+            //drawGames(filters);
+
+//        });
+        drawGames(filters);
+    }
+
+
+    function filter(d, filters) {
+
+        if ((filters["teamNameFilter"]) !== "Select") {
+
+            if (filters["teamNameFilter"] !== d["Home Team"] && filters["teamNameFilter"] !== d["Away Team"]) {
+                return "hidden";
+            }
+        }
+
+        if ((filters["homeAwayFilter"]) !== "Select") {
+            if (filters["teamNameFilter"] !== d["Home Team"] && filters["homeAwayFilter"] === "Home" ||
+                    filters["teamNameFilter"] !== d["Away Team"] && filters["homeAwayFilter"] === "Away") {
+                return "hidden";
+            }
+        }
+
+        if (filters["venueFilter"] !== "Select") {
+            if (d["Venue"] !== filters["venueFilter"]) {
+                return "hidden";
+            }
+        }
+
+        if (filters["winLossFilter"] !== "Select") {
+            if (d.Outcome !== filters["teamNameFilter"] && filters["teamNameFilter"] !== "Select" && filters["winLossFilter"] === "Win" ||
+                    d.Loss !== filters["teamNameFilter"] && filters["teamNameFilter"] !== "Select" && filters["winLossFilter"] === "Loss") {
+                return "hidden";
+            }
+        }
+
+
+        //    if(d["Home Team"]===name|| d["Away Team"]===name){
+        //        return "visible";
+        //    }
+        return "visible";
+
+    }
+
+
+    var wd = 0;
+    function drawGames(selections) {
+        console.log(filters);
+        d3.selectAll("svg")
+                .remove();
+        d3.selectAll("table")
+                .remove();
+
+
+
+
+        var x = 30;
+        var y = 80;
+        var color = d3.scale.category20();
+        var svg = d3.select("body").select("#filter").append("svg").attr({
+            width: wd,
+            height: h
+        });
+
+        var teams = new Array();
+
+        for (var key in map) {
+
+            teams.push(map[key]);
+        }
+
+        var randomXPosition = function () {
+            return 60 + (Math.random() * ((width - 120) + 1));
+        }
+
+        var randomYPosition = function () {
+            return 60 + (Math.random() * ((height - 120) + 1));
+        }
+
+        svg.selectAll("circle")
+                .data(ds)
+                .enter().append("circle")
+                .attr("cx", randomXPosition)
+                .attr("cy", randomYPosition)
+                .attr("stroke-width", 3)
+                .attr("stroke", "black")
+                .attr("r", 40)
+                .attr("fill", function (d, i) {
+                    return color(i);
+                })
+                .on("mouseover", function (d) {
+                    d3.select(this).classed("highlight", true);
+                    //Get this bar's x/y values, then augment for the tooltip
+                    var xPosition = parseFloat(d3.select(this).attr("cx"));
+                    var yPosition = parseFloat(d3.select(this).attr("cy")) / 2 + h / 2;
+
+                    //Update the tooltip position and value
+                    d3.select("#tooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px")
+                            .select("#value")
+                            .html("Round number:" + d.Round+"<br>"+"Date:"+d.Date+"<br>"+ "Home Team:"+ d["Home Team"]+"<br>"+"Away Team:"+d["Away Team"]+"<br>"+"Winner: "+d["Outcome"]);
+
+                    //Show the tooltip
+                    d3.select("#tooltip").classed("hidden", false);
+                }).on("mouseout", function () {
+                    d3.select(this).classed("highlight", false);
+                    d3.select("#tooltip").classed("hidden", true);
+                })
+                .transition().duration(2500)
+                .attr("cx", function (d) {
+                    x += 10;
+                    return (x);
+                }).attr("cy", function (d) {
+                    if (y === 400) {
+                        x = 5;
+                        y = 80
+                    };
+                    y += 20;
+                    return (y);
+                }).attr("r", 40)
+                .attr("fill", function (d, i) {
+                    return color(i);
+                }).attr("visibility", function (d) {
+                    return filter(d, selections);
+                });
+
+
+    }
+
+
     function get2008Data(data){
         var temp = [];
         data.forEach(function(d){
@@ -768,7 +1024,7 @@ var m;
 
         d3.selectAll("svg")
                 .remove();
-        d3.select("table")
+        d3.selectAll("table")
                 .remove();
 
         var teams = new Array();

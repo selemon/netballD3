@@ -47,14 +47,18 @@
     </select>
 </span>
 
+
+
+
 <div class="bubbleChart"/>
 
 <script>
-    
     var selected = JSON.parse(sessionStorage.getItem("selected"));
     var map = JSON.parse(sessionStorage.getItem("map"));
 
     var file;
+
+
 
 
     var point = d3.select("body").select("#search")
@@ -87,7 +91,7 @@
         if(teamPicked(map[key].name)){
             teams.push(map[key]);
         }
-//                alert(map[key].name);
+//                alert(venue[key].name);
     }
 
 
@@ -256,6 +260,8 @@
         });
         return counter;
     }
+
+
 
 </script>
 </body>
