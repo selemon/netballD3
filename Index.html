@@ -91,35 +91,10 @@
       </ul>
    </li>
    </li>
-   <li class='active has-sub' id="rounds2"><a href='#'><span>Round</span></a>
-    <ul>
-        <li class='has-sub'><a href='#' value="AllRounds"><span>All Rounds</span></a></li>
-        <li class='has-sub'><a href='#'value="Round 1"><span>Round 1</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 2"><span>Round 2</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 3"><span>Round 3</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 4"><span>Round 4</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 5"><span>Round 5</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 6"><span>Round 6</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 7"><span>Round 7</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 8"><span>Round 8</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 9"><span>Round 9</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 10"><span>Round 10</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 11"><span>Round 11</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 12"><span>Round 12</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 13"><span>Round 13</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 14"><span>Round 14</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 15"><span>Round 15</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 16"><span>Round 16</span></a></li>
-        <li class='has-sub'><a href='#' value="Round 17"><span>Round 17</span></a></li>
-        <li class='has-sub'><a href='#' value="Finals"><span>Finals</span></a></li>
-
-      </ul>
-   </li>
-   </li>
-   <li class='last'><a href='#'><span>          </span></a></li>
+   <!--<li class='last'><a href='#'><span>          </span></a></li>-->
    <li id="filterData"><a href='#'><span>Filter Data</span></a></li>
    <li id="totalWins" href='#'><a href='#' ><span>Total Wins</span></a></li>
-   <li id="H2H"><a href='bubble.html' onclick="H2H()"><span>Head to Head</span></a></li>
+   <li id="H2H"><a href='#' onclick="H2H()"><span>Head to Head</span></a></li>
    <li id="teamStat"><a href='#'><span>Team Stats</span></a></li>
    <li id="showAllByes"><a href='#' onclick="showByes()"><span>Show Byes</span></a></li>
    <li id="showAllData"><a href='#' onclick="showData()"><span>Show All Data</span></a></li>
@@ -265,6 +240,7 @@ showH.on("click", function(){
             selected = ["New South Wales Swifts", "Waikato Bay of Plenty Magic", "Southern Steel", "Central Pulse", "Northern Mystics", "Melbourne Vixens", "Queensland Firebirds", "Adelaide Thunderbirds", "Canterbury Tactix", "West Coast Fever"];
         }
         sessionStorage.setItem('selected', JSON.stringify(selected));
+        window.location.assign('bubble.html');
     }
 });
 
